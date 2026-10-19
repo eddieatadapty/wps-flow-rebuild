@@ -1,0 +1,1569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- flow-rebuild template (Growth Audit, v3: + walkthrough video, phone view/QR, localization, paywall today vs proposed). Replace every double-brace placeholder, everything between
+     the SCREENS markers, and the CONTENT json. Rules that brand-check.py enforces are marked RULE.
+     Reference builds: eddieatadapty.github.io/datacamp-flow-rebuild-v2 · bterzic123.github.io/planner5d-flow-rebuild-v2 -->
+<title>WPS Office Growth Audit</title>
+<meta name="description" content="Five ideas to turn more WPS Office users into subscribers, each built into a clickable version of WPS Office's own onboarding. Prepared by Adapty.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- the APP's font (brand.json fonts, or the closest Google family) + a mono if the app shows code -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* BRAND:START — the only place the APP's colours are written as literals. Sampled off WPS Office's recorded iOS screens (brand.json "sampled") + wps.com. */
+:root{
+  --b-primary:#3952f7;        /* Continue with Google / primary buttons */
+  --b-primary-ink:#ffffff;
+  --b-bg:#f9fafe;             /* onboarding ground */
+  --b-surface:#ffffff;
+  --b-ink:#222021;            /* paywall title */
+  --b-ink2:#6b6b6b;
+  --b-line:#e7e8ed;           /* trial timeline rail */
+  --b-accent2:#7a39ed;        /* WPS AI purple */
+  --b-grad:linear-gradient(90deg,#44baf9 0%,#255af6 52%,#7335f2 100%);   /* Start 3-Day Free Trial */
+  --b-aigrad:linear-gradient(90deg,#2400f3 0%,#bb00aa 52%,#f1541d 100%); /* WPS AI 3-Day Free Trial */
+  --b-onb:linear-gradient(165deg,#eef9ff 0%,#f9fafe 48%,#f3f0fe 100%);   /* carousel ground */
+  --b-pw:linear-gradient(180deg,#f5f8fd 0%,#ffffff 72%);                 /* paywall ground */
+  --b-blue2:#3f72f1;          /* timeline lock + checks */
+  --b-soft:#e8edfa;
+  --b-aisoft:#f7f4ff;
+  --b-ok:#61c999;             /* Payment Successful */
+  --b-gray:#f6f6f6;           /* sign-up ground, proof card */
+  --b-star:#ed7405;           /* site orange, rating stars */
+  --b-radius:12px;
+  --b-pill:12px;
+  --b-font:'Inter',-apple-system,system-ui,sans-serif;
+  --b-mono:ui-monospace,monospace;
+}
+/* BRAND:END */
+/* A second app family (e.g. a mono for code) is applied HERE, never in SCREENS css (brand-check allows only
+   var(--b-font) there). Prefix with .scr so it beats the screens' font shorthands, e.g.:
+   .scr .code,.scr .instr code{font-family:var(--b-mono)} */
+
+/* ================= the audit page — Adapty's, not the app's. Light, Apple-style. ================= */
+:root{
+  color-scheme:light;
+  --st-ground:#f5f5f7; --st-card:#ffffff; --st-ink:#1d1d1f; --st-ink2:#6e6e73; --st-ink3:#86868b;
+  --st-hair:rgba(0,0,0,.09); --st-link:#0066cc;
+  --st-accent:#171b24;      /* dark brand colour of the APP: buttons, the outcome band */
+  --st-hi:#4098ff;          /* bright brand colour of the APP: outcome numbers on the band, idea dots */
+  --st-mark:rgba(64,152,255,.42); /* --st-hi at ~.5 alpha: the highlighter under impact numbers */
+  --st-font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+html,body{margin:0}
+body{background:var(--st-ground);color:var(--st-ink);font-family:var(--st-font);-webkit-font-smoothing:antialiased;font-size:17px;line-height:1.47}
+.au-wrap{max-width:1080px;margin:0 auto;padding-inline:22px}
+a{color:var(--st-link)}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--st-link);outline-offset:3px;border-radius:6px}
+mark{background:linear-gradient(transparent 62%,var(--st-mark) 62%,var(--st-mark) 92%,transparent 92%);color:inherit;padding:0 .04em}
+
+/* nav */
+.au-nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(245,245,247,.8);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--st-hair)}
+.au-nav-in{max-width:1080px;margin:0 auto;padding-inline:22px;height:52px;display:flex;align-items:center;gap:26px}
+.au-brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.au-brand img{width:26px;height:26px;border-radius:7px;flex:none}
+.au-brand span{font-size:15px;font-weight:600;letter-spacing:-.01em;white-space:nowrap}
+.au-brand small{font-size:15px;font-weight:400;color:var(--st-ink2)}
+.au-nav a{font-size:13px;color:var(--st-ink);text-decoration:none;opacity:.82}
+.au-nav a:hover{opacity:1}
+@media (max-width:560px){.au-nav a.au-opt{display:none}.au-brand small{display:none}}
+
+/* hero */
+.au-top-hero{text-align:center;padding-top:clamp(56px,9vw,96px);overflow:hidden;position:relative}
+.au-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--st-ink);margin:0 0 14px}
+.au-eyebrow i{width:8px;height:8px;border-radius:50%;background:var(--st-hi);box-shadow:0 0 0 3px var(--st-mark)}
+.au-display{font-size:clamp(60px,12vw,120px);line-height:.98;font-weight:700;letter-spacing:-.05em;margin:0}
+.au-lede{font-size:clamp(23px,3.4vw,34px);line-height:1.16;font-weight:600;letter-spacing:-.022em;max-width:760px;margin:22px auto 0;text-wrap:balance}
+.au-lede span{color:var(--st-ink2)}
+.au-byline{font-size:14px;color:var(--st-ink3);margin:18px 0 0}
+.au-ctas{display:flex;gap:26px;justify-content:center;align-items:center;margin-top:30px;flex-wrap:wrap}
+.au-btn{display:inline-block;background:var(--st-accent);color:#fff;border-radius:980px;padding:12px 23px;font-size:17px;font-weight:500;text-decoration:none;border:0;cursor:pointer}
+.au-btn:hover{filter:brightness(1.25)}
+.au-lnk{background:none;border:0;padding:0;color:var(--st-link);font-size:17px;text-decoration:none;cursor:pointer}
+.au-lnk::after{content:"\00a0›"}
+.au-lnk:hover{text-decoration:underline}
+.au-phones{display:flex;justify-content:center;align-items:flex-start;margin-top:clamp(40px,6vw,64px);height:clamp(300px,52vw,560px)}
+.au-hp{flex:none;border:0;padding:0;background:none;cursor:pointer;width:27%;max-width:290px;margin:0 -2.5%;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.au-hp img{display:block;width:100%;height:auto;filter:drop-shadow(0 28px 50px rgba(0,0,0,.2))}
+.au-hp.au-c{width:31%;max-width:330px;z-index:2}
+.au-hp.au-l{transform:translateY(12%) rotate(-5deg)}
+.au-hp.au-r{transform:translateY(12%) rotate(5deg)}
+.au-hp.au-l:hover{transform:translateY(9%) rotate(-5deg)}.au-hp.au-r:hover{transform:translateY(9%) rotate(5deg)}.au-hp.au-c:hover{transform:translateY(-3%)}
+
+/* sections */
+.au-sec{padding-block:clamp(72px,10vw,120px)}
+.au-sec.au-white{background:var(--st-card)}
+.au-kicker{font-size:15px;font-weight:600;color:var(--st-ink2);margin:0 0 12px}
+.au-h2{font-size:clamp(34px,5.2vw,56px);line-height:1.06;font-weight:700;letter-spacing:-.035em;margin:0;text-wrap:balance}
+.au-h2 span{color:var(--st-ink3)}
+.au-split{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,6vw,80px);align-items:end}
+.au-split p{margin:0;font-size:clamp(17px,1.7vw,21px);line-height:1.45;color:var(--st-ink2);letter-spacing:-.01em}
+.au-split p b{color:var(--st-ink);font-weight:600}
+.au-split p + p{margin-top:16px}
+.au-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(48px,7vw,80px);border-top:1px solid var(--st-hair)}
+.au-stat{padding:28px 20px 0 0}
+.au-stat b{display:block;font-size:clamp(40px,5.5vw,64px);font-weight:700;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.au-stat span{display:block;font-size:15px;color:var(--st-ink2);margin-top:10px;max-width:22ch}
+.au-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,40px);margin-top:clamp(48px,7vw,72px)}
+.au-note h3{font-size:19px;font-weight:600;letter-spacing:-.015em;margin:0 0 8px}
+.au-note p{margin:0;font-size:15.5px;line-height:1.5;color:var(--st-ink2)}
+.au-note .au-ic{width:36px;height:36px;border-radius:10px;background:var(--st-ground);display:grid;place-items:center;margin-bottom:16px}
+.au-note .au-ic svg{width:19px;height:19px;stroke:var(--st-accent);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ideas */
+.au-ideas-h{margin-bottom:clamp(32px,5vw,48px)}
+.au-list{background:var(--st-card);border-radius:28px;padding-inline:clamp(20px,4vw,44px)}
+.au-idea{display:grid;grid-template-columns:56px 1fr 220px;gap:20px;align-items:start;padding-block:clamp(26px,3.5vw,36px);border-top:1px solid var(--st-hair)}
+.au-idea:first-child{border-top:0}
+.au-idea .au-num{font-size:15px;font-weight:600;color:var(--st-ink3);font-variant-numeric:tabular-nums;padding-top:6px}
+.au-idea h3{font-size:clamp(21px,2.4vw,26px);line-height:1.2;font-weight:600;letter-spacing:-.022em;margin:0 0 8px}
+.au-idea p{margin:0 0 12px;font-size:17px;line-height:1.5;color:var(--st-ink2);max-width:58ch}
+.au-idea p code{font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--st-ink);background:var(--st-ground);padding:2px 7px;border-radius:6px}
+.au-idea .au-lnk{font-size:15px}
+.au-imp{text-align:right}
+.au-imp .au-v{font-size:clamp(30px,3.6vw,40px);font-weight:700;letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums;color:var(--st-accent)}
+.au-imp .au-l{font-size:13.5px;color:var(--st-ink2);margin-top:8px}
+.au-band{margin-top:20px;background:var(--st-accent);color:#fff;border-radius:28px;padding:clamp(32px,5vw,56px);display:grid;grid-template-columns:1fr auto;gap:clamp(28px,5vw,64px);align-items:center}
+.au-band .au-k{font-size:15px;font-weight:600;color:rgba(255,255,255,.62);margin:0 0 10px}
+.au-band h3{font-size:clamp(24px,3vw,32px);line-height:1.18;font-weight:600;letter-spacing:-.022em;margin:0;text-wrap:balance}
+.au-band .au-fn{font-size:13px;line-height:1.5;color:rgba(255,255,255,.55);margin:16px 0 0;max-width:52ch}
+.au-nums{display:flex;gap:clamp(28px,4vw,48px)}
+.au-nums small{display:block;font-size:13px;color:rgba(255,255,255,.62)}
+.au-nums b{display:block;font-size:clamp(48px,6.5vw,76px);font-weight:700;letter-spacing:-.045em;line-height:1;color:var(--st-hi);font-variant-numeric:tabular-nums;margin:4px 0 8px}
+.au-nums span{font-size:14px;color:rgba(255,255,255,.8)}
+.au-band .au-btn{background:var(--st-hi);color:var(--st-accent);font-weight:600;margin-top:26px}
+
+/* prototype */
+.au-proto-h{text-align:center;max-width:720px;margin:0 auto}
+.au-proto-h p{font-size:clamp(17px,1.7vw,21px);color:var(--st-ink2);margin:14px 0 0}
+.au-seg{display:flex;gap:4px;justify-content:center;margin:clamp(28px,4vw,40px) auto 0;padding:4px;background:var(--st-ground);border-radius:980px;width:max-content;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.au-seg::-webkit-scrollbar{display:none}
+.au-chip{flex:none;display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--st-ink2);font-size:13.5px;font-weight:500;padding:8px 14px;border-radius:980px;cursor:pointer;white-space:nowrap}
+.au-chip:hover{color:var(--st-ink)}
+.au-chip.on{background:var(--st-card);color:var(--st-ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.au-chip i{font-style:normal;font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--st-hi);color:var(--st-accent)}
+.au-stage{display:grid;grid-template-columns:auto minmax(0,420px);gap:clamp(32px,6vw,72px);justify-content:center;align-items:center;margin-top:clamp(28px,4vw,44px)}
+.phone{width:390px;height:844px;border-radius:56px;padding:10px;background:#0b0d10;box-shadow:0 0 0 1.5px #3a3d42,0 40px 90px rgba(0,0,0,.25);max-width:calc(100vw - 44px)}
+.phone-in{position:relative;width:100%;height:100%;border-radius:46px;overflow:hidden;background:var(--b-bg)}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000;z-index:9}
+.sbar{position:absolute;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;align-items:center;padding:4px 32px 0;font:600 15px -apple-system,system-ui,sans-serif;color:var(--b-ink);z-index:8;pointer-events:none}
+.au-pn{background:var(--st-ground);border-radius:28px;padding:clamp(26px,3.5vw,38px)}
+.au-pn-k{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--st-ink)}
+.au-pn-k i{width:8px;height:8px;border-radius:50%;background:var(--st-hi);box-shadow:0 0 0 3px var(--st-mark)}
+.au-pn-k.au-ctx{color:var(--st-ink2)}.au-pn-k.au-ctx i{background:var(--st-ink3);box-shadow:none}
+.au-pn-t{font-size:clamp(24px,2.6vw,30px);line-height:1.12;font-weight:700;letter-spacing:-.028em;margin:10px 0 14px;text-wrap:balance}
+.au-pn-h{margin:0;font-size:17px;line-height:1.55;color:var(--st-ink2)}
+.au-pn-h b{color:var(--st-ink);font-weight:600}
+.au-pn-o{margin-top:24px;padding-top:22px;border-top:1px solid var(--st-hair)}
+.au-pn-o .au-lab{font-size:13px;font-weight:600;color:var(--st-ink3)}
+.au-pn-o .au-val{font-size:clamp(38px,4.4vw,50px);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:var(--st-accent);margin-top:6px;font-variant-numeric:tabular-nums}
+.au-pn-o .au-sub{font-size:14px;color:var(--st-ink2);margin-top:4px}
+.au-pn-a{margin:18px 0 0;font-size:14px;line-height:1.5;color:var(--st-ink2)}
+.au-pn-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:28px;padding-top:18px;border-top:1px solid var(--st-hair);font-size:13px;color:var(--st-ink3)}
+.au-pn-nav button{background:var(--st-card);border:0;border-radius:980px;padding:8px 15px;font-size:14px;font-weight:500;color:var(--st-ink);cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.au-pn-nav button:disabled{opacity:.35;cursor:default}
+.au-hint{text-align:center;font-size:14px;color:var(--st-ink3);margin:22px 0 0}
+
+/* footer */
+.au-foot{padding-block:56px 72px;border-top:1px solid var(--st-hair)}
+.au-foot details{border-bottom:1px solid var(--st-hair);padding-bottom:18px}
+.au-foot summary{cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.au-foot summary::-webkit-details-marker{display:none}
+.au-foot summary::after{content:"+";font-size:24px;font-weight:300;color:var(--st-ink2)}
+.au-foot details[open] summary::after{content:"−"}
+.au-srcs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 48px;margin-top:18px}
+.au-srcs h4{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--st-ink3);margin:18px 0 6px}
+.au-srcs dl{margin:0}.au-srcs dt{font-size:14.5px;font-weight:600;margin-top:10px}
+.au-srcs dd{margin:3px 0 0;font-size:14px;line-height:1.5;color:var(--st-ink2)}
+.au-fine{font-size:12.5px;line-height:1.6;color:var(--st-ink3);margin:22px 0 0;max-width:80ch}
+.au-cta-line{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:36px}
+.au-cta-line p{margin:0;font-size:clamp(19px,2.2vw,24px);font-weight:600;letter-spacing:-.02em;max-width:34ch}
+
+@media (max-width:900px){
+  .au-split,.au-band{grid-template-columns:1fr}
+  .au-notes{grid-template-columns:1fr}
+  .au-idea{grid-template-columns:40px 1fr}
+  .au-imp{grid-column:2;text-align:left;display:flex;align-items:baseline;gap:10px}
+  .au-imp .au-l{margin:0}
+  .au-imp .au-v{white-space:nowrap}
+  .au-stage{grid-template-columns:1fr;justify-items:center}
+  .au-pn{width:100%;max-width:520px}
+  .au-srcs{grid-template-columns:1fr}
+}
+@media (max-width:560px){.au-stats{grid-template-columns:1fr}.au-stat{padding:22px 0 0}.au-nums{flex-direction:column;gap:18px}}
+
+/* ================= extras (audit side): video, language, phone view + QR, paywall today vs proposed, ?tour ================= */
+[hidden]{display:none!important}
+/* the device never scrolls: off-screen slides would otherwise make it scrollable by focus / scrollIntoView */
+.phone-in,.scr{overflow:clip}
+/* hero: walkthrough link */
+.au-play::before{content:"▶";font-size:.72em;margin-right:7px;position:relative;top:-1px}
+/* video dialog */
+.au-vid{border:0;padding:0;background:transparent;max-width:min(1120px,94vw);width:100%;overflow:visible}
+.au-vid::backdrop{background:rgba(0,0,0,.74);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.au-vid-in{background:#000;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.au-vid video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+.au-vid-bar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 4px 0;font-size:14px}
+.au-vid-bar a{color:#fff;opacity:.85}
+.au-vid-x{background:rgba(255,255,255,.16);border:0;color:#fff;border-radius:980px;padding:8px 16px;font-size:14px;cursor:pointer}
+/* language switch */
+.au-langrow{display:flex;justify-content:center;align-items:center;gap:12px;margin:18px 0 0;font-size:13.5px;color:var(--st-ink2);flex-wrap:wrap}
+.au-lsw{display:inline-flex;gap:2px;padding:3px;background:var(--st-ground);border-radius:980px}
+.au-lsw button{border:0;background:none;padding:6px 13px;border-radius:980px;font-size:13.5px;font-weight:500;color:var(--st-ink2);cursor:pointer;white-space:nowrap}
+.au-lsw button.on{background:var(--st-card);color:var(--st-ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+/* QR card (desktop) / full-screen button (phone) */
+.au-qr{display:flex;align-items:center;gap:18px;margin:26px auto 0;max-width:500px;background:var(--st-ground);border-radius:22px;padding:14px 22px 14px 14px}
+.au-qr img{width:112px;height:112px;border-radius:12px;image-rendering:pixelated;flex:none;background:#fff}
+.au-qr b{display:block;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.au-qr p{margin:4px 0 0;font-size:14.5px;line-height:1.45;color:var(--st-ink2)}
+.au-mobw{display:none;text-align:center;margin-top:22px}
+@media (max-width:900px){.au-qr{display:none}.au-mobw{display:block}}
+/* paywall: today vs proposed */
+.au-cmp{display:grid;grid-template-columns:minmax(0,290px) minmax(0,1fr) minmax(0,290px);gap:clamp(24px,4vw,52px);align-items:center;margin-top:clamp(32px,5vw,52px)}
+.au-cmp figure{margin:0;text-align:center}
+.au-cmp figure img{display:block;width:100%;height:auto;filter:drop-shadow(0 24px 44px rgba(0,0,0,.18))}
+.au-cmp figcaption{margin-top:14px;font-size:15px;font-weight:600}
+.au-cmp figcaption span{color:var(--st-ink2);font-weight:400}
+.au-cmp-go{border:0;padding:0;background:none;cursor:pointer;display:block;width:100%;transition:transform .3s}
+.au-cmp-go:hover{transform:translateY(-4px)}
+.au-chg{list-style:none;margin:0;background:var(--st-card);border-radius:24px;padding:4px clamp(18px,2.4vw,28px)}
+.au-chg li{padding:15px 0;border-top:1px solid var(--st-hair)}
+.au-chg li:first-child{border-top:0}
+.au-chg h4{margin:0 0 7px;font-size:16px;font-weight:600;letter-spacing:-.01em;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.au-chg h4 i{font-style:normal;font-size:12px;font-weight:600;color:var(--st-accent);background:var(--st-mark);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.au-was,.au-now{display:grid;grid-template-columns:78px 1fr;gap:8px;font-size:14.5px;line-height:1.42}
+.au-was{color:var(--st-ink3)}
+.au-now{color:var(--st-ink);margin-top:3px}
+.au-was em,.au-now em{font-style:normal;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
+.au-now em{color:var(--st-link)}
+.au-kept{margin:22px 0 0;font-size:14px;color:var(--st-ink2);text-align:center}
+@media (max-width:900px){.au-cmp{grid-template-columns:1fr 1fr;gap:18px}.au-chg{grid-column:1 / -1;order:3}.au-was,.au-now{grid-template-columns:70px 1fr}}
+
+/* ?app — the prototype full screen on a real phone, with a bar that opens the idea panel */
+html.appmode,html.appmode body{height:100%;overflow:hidden;background:#000}
+html.appmode .au-nav,html.appmode .au-top-hero,html.appmode #why,html.appmode #ideas,html.appmode #compare,html.appmode .au-foot,
+html.appmode .au-proto-h,html.appmode #prototype .au-langrow,html.appmode #chips,html.appmode .au-hint,html.appmode .au-qr,html.appmode .au-mobw{display:none!important}
+html.appmode #prototype{padding:0;background:#000}
+html.appmode #prototype .au-wrap{padding:0;max-width:none}
+html.appmode .au-stage{display:block;margin:0}
+html.appmode .phone{position:fixed;top:0;left:0;right:0;margin:0 auto;width:min(100%,480px);height:calc(100% - 56px - env(safe-area-inset-bottom,0px));max-width:none;border-radius:0;padding:0;box-shadow:none;background:#000}
+html.appmode .phone-in{border-radius:0}
+html.appmode .island,html.appmode .sbar{display:none}
+html.appmode .scr .s-pad{padding-top:max(58px,calc(env(safe-area-inset-top,0px) + 16px))}
+html.appmode .scr .s-x,html.appmode .scr .s-lang{top:max(54px,calc(env(safe-area-inset-top,0px) + 10px))}
+.au-appbar,.au-scrim{display:none}
+html.appmode .au-appbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;height:calc(56px + env(safe-area-inset-bottom,0px));padding:0 12px env(safe-area-inset-bottom,0px) 16px;align-items:center;gap:12px;background:#0b0b0c;border-top:1px solid rgba(255,255,255,.1);color:#fff}
+.au-ab-why{flex:1;min-width:0;display:flex;align-items:center;gap:9px;background:none;border:0;color:#fff;font-size:14px;font-weight:500;text-align:left;cursor:pointer;padding:0}
+.au-ab-why i{width:8px;height:8px;border-radius:50%;background:var(--st-hi);flex:none}
+.au-ab-why span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.au-ab-why em{font-style:normal;color:rgba(255,255,255,.6);margin-left:auto;flex:none;font-size:13px}
+.au-appbar .au-lsw{background:rgba(255,255,255,.12)}
+.au-appbar .au-lsw button{color:rgba(255,255,255,.75);padding:5px 11px}
+.au-appbar .au-lsw button.on{background:#fff;color:#000}
+html.appmode #panel{position:fixed;left:0;right:0;bottom:0;z-index:80;max-width:none;width:auto;margin:0 auto;border-radius:24px 24px 0 0;max-height:78%;overflow:auto;transform:translateY(105%);transition:transform .3s cubic-bezier(.3,.7,.2,1);padding-bottom:calc(26px + env(safe-area-inset-bottom,0px))}
+html.appmode.au-open #panel{transform:none}
+html.appmode.au-open .au-scrim{display:block;position:fixed;inset:0;z-index:75;background:rgba(0,0,0,.5)}
+
+/* ?tour — 1280×720 walkthrough frames (record-video.sh renders them into assets/walkthrough.mp4) */
+.au-tour{display:none}
+html.tourmode,html.tourmode body{overflow:hidden;background:var(--st-ground)}
+html.tourmode body *{visibility:hidden}
+html.tourmode .phone,html.tourmode .phone *,html.tourmode .au-tour,html.tourmode .au-tour *{visibility:visible}
+html.tourmode .phone{position:fixed;left:170px;top:44px;margin:0;transform:scale(.755);transform-origin:0 0;box-shadow:0 0 0 1.5px #3a3d42,0 34px 80px rgba(0,0,0,.22);z-index:5;max-width:none}
+html.tourmode .au-tour{display:block;position:fixed;inset:0;z-index:6;pointer-events:none;color:var(--st-ink)}
+.au-tb{position:absolute;left:590px;top:30px;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600}
+.au-tb img{width:26px;height:26px;border-radius:7px}
+.au-tb small{font-size:16px;font-weight:400;color:var(--st-ink2)}
+.au-tby{position:absolute;right:48px;top:32px;font-size:14px;color:var(--st-ink3)}
+.au-tcap{position:absolute;left:590px;right:60px;top:50%;transform:translateY(-50%)}
+.au-tk{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:600}
+.au-tk i{width:9px;height:9px;border-radius:50%;background:var(--st-hi);box-shadow:0 0 0 3px var(--st-mark)}
+.au-tk.au-ctx{color:var(--st-ink2)}.au-tk.au-ctx i{background:var(--st-ink3);box-shadow:none}
+.au-tt{font-size:46px;line-height:1.06;font-weight:700;letter-spacing:-.035em;margin:14px 0 14px;text-wrap:balance}
+.au-tl{font-size:23px;line-height:1.36;color:var(--st-ink2);letter-spacing:-.01em;margin:0;max-width:28ch}
+.au-to{margin-top:28px;padding-top:22px;border-top:1px solid var(--st-hair)}
+.au-to small{display:block;font-size:14px;font-weight:600;color:var(--st-ink3)}
+.au-to b{display:inline-block;font-size:62px;font-weight:700;letter-spacing:-.045em;line-height:1.08;color:var(--st-accent);margin-top:4px}
+.au-to span{display:block;font-size:16px;color:var(--st-ink2);margin-top:2px}
+.au-tprog{position:absolute;left:48px;right:48px;bottom:22px;height:4px;border-radius:3px;background:var(--st-hair);overflow:hidden}
+.au-tprog i{display:block;height:100%;background:var(--st-hi)}
+.au-ttap{position:absolute;left:0;top:0;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.5);box-shadow:0 0 0 2.5px rgba(255,255,255,.9),0 6px 16px rgba(0,0,0,.35);opacity:0}
+.au-tintro,.au-tend{position:absolute;inset:0;background:var(--st-ground);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0}
+.au-tintro .au-lede{margin-top:18px}
+.au-te-h{font-size:46px;line-height:1.08;font-weight:700;letter-spacing:-.035em;margin:0;max-width:18ch;text-wrap:balance}
+.au-te-n{display:flex;gap:64px;margin-top:30px}
+.au-te-n small{display:block;font-size:14px;color:var(--st-ink2)}
+.au-te-n b{display:block;font-size:76px;font-weight:700;letter-spacing:-.045em;line-height:1;color:var(--st-accent);margin:4px 0 6px}
+.au-te-n span{font-size:15px;color:var(--st-ink2)}
+.au-te-q{display:flex;align-items:center;gap:18px;margin-top:34px;background:var(--st-card);border-radius:20px;padding:12px 24px 12px 12px;text-align:left}
+.au-te-q img{width:104px;height:104px;border-radius:10px;image-rendering:pixelated}
+.au-te-q b{display:block;font-size:18px;font-weight:600}
+.au-te-q span{display:block;font-size:15px;color:var(--st-link);margin-top:3px}
+.au-te-f{position:absolute;bottom:44px;left:0;right:0;font-size:13px;color:var(--st-ink3);margin:0}
+
+/* ---------- screen engine (layout only, no colours) ---------- */
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--b-bg);color:var(--b-ink);font-family:var(--b-font);
+     transform:translateX(100%);transition:transform .32s cubic-bezier(.3,.7,.2,1);overflow:hidden;text-align:left;line-height:normal;font-size:16px}
+.scr.is-active{transform:none;z-index:2}.scr.is-past{transform:translateX(-28%)}.scr.under{transform:none;z-index:1}
+.scr.sheet{transform:translateY(100%)}.scr.sheet.is-active{transform:none}
+.nofx,.nofx *{transition:none!important}
+.shot .scr{transition:none!important}
+/* ?phone — just the device at (10,10), for shoot.sh and hero-stills.sh (&clear = transparent ground) */
+.phoneonly body{background:#141615}
+.phoneonly.clear body{background:transparent}
+.phoneonly body *{visibility:hidden}
+.phoneonly .phone,.phoneonly .phone *{visibility:visible}
+.phoneonly .phone{position:fixed;top:10px;left:10px;z-index:99;box-shadow:none;max-width:none;margin:0}
+
+/* SCREENS:START — WPS Office screens. Colours only via var(--b-*) or white/black alpha. */
+.s-pad{flex:1;display:flex;flex-direction:column;padding:58px 22px 26px;position:relative;z-index:1;min-height:0}
+.s-onb{background:var(--b-onb)}
+.s-white{background:var(--b-surface)}
+.s-c{text-align:center}
+/* carousel slide (their layout) */
+.s-later{align-self:flex-end;background:none;border:0;font:500 16px var(--b-font);color:var(--b-ink2);padding:4px 4px;cursor:pointer;opacity:.7}
+.s-ttl{font:700 23px/1.2 var(--b-font);color:var(--b-ink);text-align:center;margin:12px 0 0;letter-spacing:-.01em}
+.s-sub{font:400 15px/1.4 var(--b-font);color:var(--b-ink2);text-align:center;margin:8px 0 0}
+.s-art{display:block;width:100%;height:auto;margin:auto 0}
+.s-dots{display:flex;gap:4px;justify-content:center;margin:4px 0 18px}
+.s-dots i{width:4px;height:4px;border-radius:3px;background:var(--b-line)}
+.s-dots i.on{width:11px;background:var(--b-ink2)}
+.s-sso{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;height:46px;border-radius:var(--b-radius);font:600 16px var(--b-font);cursor:pointer;flex:none}
+.s-g{background:var(--b-primary);color:var(--b-primary-ink);border:0}
+.s-g img{width:24px;height:24px;border-radius:50%}
+.s-a{background:#fff;color:var(--b-ink);border:1.5px solid var(--b-ink);margin-top:11px}
+.s-a img{width:18px;height:auto}
+.s-soc{display:flex;gap:26px;justify-content:center;margin:16px 0 14px}
+.s-soc img{width:31px;height:31px;border-radius:50%}
+.s-legal{font:400 10.5px/1.6 var(--b-font);color:var(--b-ink2);text-align:center;margin:0}
+.s-legal b{font-weight:400;color:var(--b-blue2)}
+/* question + quick win */
+.s-top{display:flex;align-items:center;gap:12px;min-height:30px}
+.s-back{background:none;border:0;font:300 34px/1 var(--b-font);color:var(--b-ink);padding:0 8px 4px 0;cursor:pointer}
+.s-prog{flex:1;height:4px;border-radius:2px;background:var(--b-line);overflow:hidden}
+.s-prog i{display:block;height:100%;background:var(--b-primary);border-radius:2px}
+.s-h{font:700 26px/1.2 var(--b-font);color:var(--b-ink);margin:24px 0 0;letter-spacing:-.015em}
+.s-p{font:400 15px/1.45 var(--b-font);color:var(--b-ink2);margin:8px 0 0}
+.s-opts{display:flex;flex-direction:column;gap:12px;margin-top:26px}
+.s-opt{display:flex;align-items:center;gap:14px;width:100%;background:var(--b-surface);border:1.5px solid var(--b-line);border-radius:var(--b-radius);padding:14px 16px;font:500 15.5px/1.3 var(--b-font);color:var(--b-ink);text-align:left;cursor:pointer}
+.s-opt img{width:30px;height:auto;flex:none}
+.s-rad{margin-left:auto;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--b-line);flex:none;background:var(--b-surface);box-sizing:border-box}
+.s-opt.on{border-color:var(--b-primary);background:var(--b-soft)}
+.s-opt.on .s-rad,.s-pl.on .s-rad{border:6.5px solid var(--b-primary)}
+.s-doc{margin-top:22px;background:var(--b-surface);border-radius:var(--b-radius);box-shadow:0 10px 34px rgba(0,0,0,.09);padding:16px 18px 18px;border:1px solid var(--b-line)}
+.s-doch{display:flex;align-items:center;gap:10px;font:500 13px var(--b-font);color:var(--b-ink2);padding-bottom:12px;border-bottom:1px solid var(--b-line)}
+.s-doch img{width:24px;height:auto}
+.s-doct{font:700 17px var(--b-font);color:var(--b-ink);margin:14px 0 4px}
+.s-ln{height:7px;border-radius:4px;background:var(--b-line);margin-top:9px}
+.s-sigl{display:flex;justify-content:space-between;font:500 12px var(--b-font);color:var(--b-ink2);margin:18px 0 6px}
+.s-sigbox{height:84px;border:1.5px dashed var(--b-blue2);border-radius:10px;display:grid;place-items:center;color:var(--b-blue2);font:500 13.5px var(--b-font);background:var(--b-soft)}
+.s-sigbox.s-done{border:0;border-bottom:1.5px solid var(--b-ink);border-radius:0;background:none}
+.s-sig{width:190px;height:64px}
+.s-sig path{fill:none;stroke:var(--b-primary);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.s-okc{display:flex;align-items:center;gap:10px;margin-top:16px;font:600 14.5px var(--b-font);color:var(--b-ink)}
+.s-okc i{width:22px;height:22px;border-radius:50%;background:var(--b-ok);position:relative;flex:none}
+.s-okc i::after{content:"";position:absolute;left:7px;top:5px;width:5px;height:9px;border:solid #fff;border-width:0 2.4px 2.4px 0;transform:rotate(45deg)}
+.s-more{margin-top:22px}
+.s-more p{font:500 13px var(--b-font);color:var(--b-ink2);margin:0 0 10px}
+.s-tools{display:flex;gap:8px}
+.s-tools span{flex:1;display:flex;align-items:center;gap:6px;background:var(--b-surface);border:1px solid var(--b-line);border-radius:10px;padding:9px 8px;font:500 12px/1.2 var(--b-font);color:var(--b-ink)}
+.s-tools img{width:18px;height:auto;flex:none}
+.s-btn{width:100%;height:50px;border:0;border-radius:var(--b-radius);background:var(--b-primary);color:var(--b-primary-ink);font:600 17px var(--b-font);margin-top:auto;cursor:pointer;flex:none}
+/* toolkit ready + proof (their Payment Successful card) */
+.s-proofh{display:flex;align-items:center;gap:12px;margin:auto 0 12px;font:500 14px var(--b-font);color:var(--b-ink2);white-space:nowrap}
+.s-proofh i{flex:1;height:1px;background:var(--b-line)}
+.s-card{background:var(--b-gray);border-radius:14px;overflow:hidden}
+.s-card img{display:block;width:100%;height:auto}
+.s-cardt{padding:12px 16px 16px;text-align:center}
+.s-cardt b{display:block;font:600 17px/1.3 var(--b-font);color:var(--b-ink)}
+.s-cardt span{display:block;font:400 13px/1.45 var(--b-font);color:var(--b-ink2);margin-top:5px}
+.s-rate{display:flex;align-items:center;justify-content:center;gap:6px;margin:16px 0 auto;font:400 13.5px var(--b-font);color:var(--b-ink2)}
+.s-rate b{font-weight:700;color:var(--b-ink)}
+.s-stars{color:var(--b-star);letter-spacing:1px;font-size:14px}
+/* paywall (their trial-timeline layout) */
+.s-pw{background:var(--b-pw)}
+.s-x{position:absolute;top:58px;right:16px;width:34px;height:34px;background:none;border:0;padding:4px;cursor:pointer;z-index:3}
+.s-x svg,.s-cls svg{width:100%;height:100%;stroke:var(--b-ink);stroke-width:1.6;fill:none}
+.s-bolt{position:absolute;right:4px;top:150px;width:68px;height:auto;z-index:0;mix-blend-mode:multiply}
+.s-pwt{font:700 26px/1.2 var(--b-font);color:var(--b-ink);text-align:center;margin:40px 0 0;letter-spacing:-.01em}
+.s-proofl{text-align:center;font:500 13px var(--b-font);color:var(--b-ink2);margin:7px 0 0}
+.s-proofl b{color:var(--b-star);font-weight:600}
+.s-tl{margin-top:24px;display:flex;flex-direction:column;gap:8px}
+.s-day{display:grid;grid-template-columns:44px 1fr;column-gap:12px;position:relative}
+.s-ic{width:36px;height:auto;justify-self:center;align-self:start;margin-top:2px;mix-blend-mode:multiply;position:relative;z-index:1}
+.s-ic.s-lk{width:44px;margin-top:-2px}
+.s-day h4{font:500 17px/1.25 var(--b-font);margin:8px 0 6px;color:var(--b-ink)}
+.s-day p{font:400 13.5px/1.4 var(--b-font);color:var(--b-ink2);margin:0 0 10px}
+.s-rail{position:absolute;left:20.5px;top:46px;bottom:6px;width:3px;border-radius:2px;background:var(--b-line)}
+.s-rail.s-on{background:linear-gradient(180deg,var(--b-blue2) 0 45%,var(--b-line) 45%)}
+.s-chk{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px}
+.s-chk li{font:400 14px/1.3 var(--b-font);color:var(--b-ink2);padding-left:24px;position:relative}
+.s-chk li::before{content:"";position:absolute;left:3px;top:3px;width:11px;height:5px;border-left:2px solid var(--b-blue2);border-bottom:2px solid var(--b-blue2);transform:rotate(-45deg)}
+.s-chk li.pick{color:var(--b-ink);font-weight:600}
+.s-plans{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.s-pl{position:relative;display:flex;align-items:center;gap:12px;width:100%;background:var(--b-surface);border:1.5px solid var(--b-line);border-radius:var(--b-radius);padding:11px 14px;cursor:pointer;text-align:left;font-family:var(--b-font);color:var(--b-ink)}
+.s-pl.on{border-color:var(--b-primary);background:var(--b-soft)}
+.s-pl .s-rad{margin-left:0}
+.s-pl b{display:block;font:600 17px var(--b-font)}
+.s-pl small{display:block;font:400 13px var(--b-font);color:var(--b-ink2);margin-top:2px}
+.s-pr{margin-left:auto;font:700 20px var(--b-font);white-space:nowrap}
+.s-pr small{display:inline;font:400 13px var(--b-font);color:var(--b-ink2)}
+.s-tag{position:absolute;top:-10px;right:14px;background:var(--b-grad);color:#fff;font:700 11px var(--b-font);font-style:normal;padding:3px 9px;border-radius:6px;letter-spacing:.02em}
+.s-gcta{display:flex;align-items:center;justify-content:center;position:relative;width:100%;height:54px;border:0;border-radius:var(--b-radius);background:var(--b-grad);color:#fff;font:600 18px var(--b-font);cursor:pointer;margin-top:14px;flex:none;padding:0 46px;white-space:nowrap}
+.s-gcta::after{content:"";position:absolute;right:24px;top:50%;width:10px;height:10px;border:solid #fff;border-width:2.4px 2.4px 0 0;transform:translateY(-50%) rotate(45deg)}
+.s-bill{text-align:center;font:400 13.5px var(--b-font);color:var(--b-ink2);margin:10px 0 4px}
+.s-rest{text-align:center;font:400 13.5px var(--b-font);color:var(--b-ink2);text-decoration:underline;margin:0}
+.s-pwt0{margin-top:44px;font-size:24px}
+.s-tl0{margin-top:60px;gap:34px}
+.s-tl0 .s-chk li{font-size:14.5px}
+.s-tl0 .s-chk{gap:9px}
+.s-tl0 .s-ic.s-lk{width:44px;margin-top:-2px}
+.s-day h4{font-size:17.5px}
+.s-tl0 .s-day p{font-size:14.5px}
+/* offer on close: their WPS AI paywall components, as a sheet */
+.scr.s-sh{background:rgba(0,0,0,.42)}
+.s-sheetc{margin-top:auto;background:var(--b-surface);border-radius:22px 22px 0 0;padding:22px 22px 28px;position:relative}
+.s-cls{position:absolute;top:16px;right:16px;width:30px;height:30px;background:none;border:0;padding:4px;cursor:pointer}
+.s-aih{display:flex;align-items:center;gap:8px;font:800 22px var(--b-font);color:var(--b-ink)}
+.s-aih img{width:26px;height:auto}
+.s-oh{font:800 24px/1.2 var(--b-font);color:var(--b-ink);margin:14px 0 0;letter-spacing:-.01em}
+.s-aipl{margin-top:18px;cursor:default}
+.s-pl.s-aipl.on{border-color:var(--b-accent2);background:var(--b-aisoft)}
+.s-aipl.on .s-rad{border-color:var(--b-accent2)}
+.s-aichk{margin:16px 0 0}
+.s-aichk li::before{border-color:var(--b-accent2)}
+.s-aicta{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:58px;border:0;border-radius:999px;background:var(--b-aigrad);color:#fff;cursor:pointer;margin-top:18px;font-family:var(--b-font)}
+.s-aicta b{font:700 18px var(--b-font)}
+.s-aicta small{font:400 13px var(--b-font);color:rgba(255,255,255,.65);margin-top:2px}
+.s-nothx{display:block;margin:14px auto 0;background:none;border:0;font:500 14.5px var(--b-font);color:var(--b-ink2);cursor:pointer}
+/* account, after the trial (their sign-up page) */
+.s-acc{background:var(--b-gray)}
+.s-acct{display:flex;align-items:center;justify-content:center;position:relative;min-height:30px;font:600 18px var(--b-font);color:var(--b-ink)}
+.s-acct .s-back{position:absolute;left:0;top:-4px}
+.s-logo{display:block;mix-blend-mode:multiply;width:128px;height:auto;margin:34px auto 0}
+.s-tag2{text-align:center;font:400 15px var(--b-font);color:var(--b-ink);margin:6px 0 0}
+.s-acc .s-h{font-size:24px;margin-top:34px}
+.s-acc .s-a{margin-top:26px}
+.s-acc .s-g{margin-top:11px}
+.s-mail{text-align:center;font:500 14.5px var(--b-font);color:var(--b-blue2);margin:16px 0 0}
+.s-acc .s-legal{margin-top:auto;text-align:left}
+/* SCREENS:END */
+</style>
+</head>
+<body>
+
+<nav class="au-nav" aria-label="Sections">
+  <div class="au-nav-in">
+    <div class="au-brand">
+      <img src="assets/brand/appstore-icon.jpg" alt="">
+      <span>Growth Audit <small>· WPS Office</small></span>
+    </div>
+    <a class="au-opt" href="#why">Why this</a>
+    <a href="#ideas">Five ideas</a>
+    <a href="#prototype">Prototype</a>
+    <a class="au-opt" href="#compare" id="navCompare" hidden>Paywall</a>
+  </div>
+</nav>
+
+<header class="au-top-hero" id="top">
+  <div class="au-wrap">
+    <p class="au-eyebrow"><i></i>Growth Audit · October 2026</p>
+    <h1 class="au-display">WPS Office</h1>
+    <p class="au-lede">Five ideas to turn more WPS Office users into subscribers. <span>Each one built into your own onboarding, so you can tap through it.</span></p>
+    <p class="au-byline">Prepared by Adapty for the WPS Office team</p>
+    <div class="au-ctas">
+      <a class="au-btn" href="#ideas">See the five ideas</a>
+      <a class="au-lnk" href="#prototype">Open the prototype</a>
+      <button type="button" class="au-lnk au-play" id="heroVideo" hidden>Watch the 30-second walkthrough</button>
+    </div>
+  </div>
+  <!-- filled from CONTENT.hero: three screen ids → assets/hero/<id>.png (make them with hero-stills.sh) -->
+  <div class="au-phones" id="heroPhones" aria-label="Three screens from the prototype"></div>
+</header>
+
+<section class="au-sec au-white" id="why">
+  <div class="au-wrap">
+    <div class="au-split">
+      <div>
+        <p class="au-kicker">Why you’re seeing this</p>
+        <h2 class="au-h2">30,000 subscription apps taught us what moves conversion. <span>Here’s what we’d test first at WPS Office.</span></h2>
+      </div>
+      <div>
+        <p>Adapty runs subscriptions for <b>more than 30,000 apps</b>, so we see which onboarding and paywall changes lift revenue across the whole market, not just inside one app.</p>
+        <p>We pointed that at WPS Office. We took <b>your own screens, copy and prices</b> from your live iOS flow and App Store listing, and rebuilt the path from install to paywall around the five ideas with the most potential.</p>
+      </div>
+    </div>
+    <div class="au-stats">
+      <div class="au-stat"><b>30,000+</b><span>apps run their subscriptions on Adapty</span></div>
+      <div class="au-stat"><b>5</b><span>ideas, each built as a working screen</span></div>
+      <div class="au-stat"><b>0</b><span>changes to your art direction</span></div>
+    </div>
+    <div class="au-notes">
+      <div class="au-note">
+        <div class="au-ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></div>
+        <h3>Five ideas, not fifteen</h3>
+        <p>We’re not proposing to rebuild every screen. These are the changes with the highest potential, ranked by what we’d test first.</p>
+      </div>
+      <div class="au-note">
+        <div class="au-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17"/></svg></div>
+        <h3>Your design, not ours</h3>
+        <p>Every colour, control and price in the prototype is WPS Office’s. We changed the order and what gets shown.</p>
+      </div>
+      <div class="au-note">
+        <div class="au-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v6.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-13A1.5 1.5 0 0 1 5.5 4H15"/></svg></div>
+        <h3>We hope you haven’t tried these yet</h3>
+        <p>We work from the outside, so we can’t see your test history. If you’ve already run one of these, tell us and we’ll go deeper on the rest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="au-sec" id="ideas">
+  <div class="au-wrap">
+    <div class="au-ideas-h">
+      <p class="au-kicker">The shortlist</p>
+      <h2 class="au-h2">Five ideas. <span>Ranked by what we’d test first.</span></h2>
+    </div>
+    <div class="au-list" id="ideaList"></div>
+    <div class="au-band">
+      <div>
+        <p class="au-k">Potential outcome, based on Adapty data</p>
+        <h3>Together they work on three moments: what someone gets before you ask for anything, what the paywall says, and what happens when they close it.</h3>
+        <p class="au-fn" id="bandFn"></p>
+        <a class="au-btn" href="#prototype">Tap through the prototype</a>
+      </div>
+      <div class="au-nums" id="bandNums"></div>
+    </div>
+  </div>
+</section>
+
+<section class="au-sec au-white" id="prototype">
+  <div class="au-wrap">
+    <div class="au-proto-h">
+      <p class="au-kicker">The prototype</p>
+      <h2 class="au-h2">Every idea, inside your own onboarding.</h2>
+      <p>Tap through it like a new user, or jump straight to an idea. Blue numbers mark the screens that carry one.</p>
+    </div>
+    <div class="au-langrow" id="langRow" hidden><span>Prototype language</span><div class="au-lsw" id="langSw" role="group" aria-label="Prototype language"></div></div>
+    <div class="au-seg" id="chips" role="tablist" aria-label="Screens"></div>
+    <div class="au-stage">
+      <div class="phone"><div class="phone-in">
+        <div class="island"></div>
+        <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+
+<!-- SCREENS:START — WPS Office: their carousel slide → one question → a quick win (sign a PDF) → toolkit ready + proof → their trial paywall (two plans) → WPS Pro AI monthly on close → account after the trial. "today" = their current paywall, word for word (data-aside). -->
+
+<section class="scr s-onb" data-id="welcome">
+  <div class="s-pad">
+    <button class="s-later" data-go="use"><span data-t="later">Later</span></button>
+    <h1 class="s-ttl" data-t="w_t">AI-Powered Efficiency</h1>
+    <p class="s-sub" data-t="w_s">AI Translate, Smart Create &amp; Edit</p>
+    <img class="s-art" src="assets/crop/art-translate.png" alt="">
+    <div class="s-dots"><i class="on"></i><i></i><i></i></div>
+    <button class="s-sso s-g" data-go="use"><img src="assets/crop/ic-google.png" alt=""><span data-t="w_g">Continue with Google</span></button>
+    <button class="s-sso s-a" data-go="use"><img src="assets/crop/ic-apple.png" alt=""><span data-t="w_a">Continue with Apple</span></button>
+    <div class="s-soc"><img src="assets/crop/ic-fb.png" alt=""><img src="assets/crop/ic-mail.png" alt=""></div>
+    <p class="s-legal" data-t="w_l">If you continue, it indicates that you agree to the <b>Privacy Policy</b>, <b>End User License Agreement</b>, <b>Service Agreement on WPS 365</b>, and <b>Online Service User Agreement</b>.</p>
+  </div>
+</section>
+
+<section class="scr" data-id="use">
+  <div class="s-pad">
+    <div class="s-top"><button class="s-back" data-back aria-label="Back">‹</button><div class="s-prog"><i style="width:34%"></i></div></div>
+    <h1 class="s-h" data-t="u_t">What will you use WPS for first?</h1>
+    <p class="s-p" data-t="u_s">We’ll put it at the top of your free trial.</p>
+    <div class="s-opts">
+      <button class="s-opt" data-pick="use:pdf" data-advance="try"><img src="assets/crop/ic-pdfedit.png" alt=""><span data-t="u_pdf">Edit, annotate &amp; sign PDFs</span><i class="s-rad"></i></button>
+      <button class="s-opt" data-pick="use:convert" data-advance="try"><img src="assets/crop/ic-pdf2word.png" alt=""><span data-t="u_conv">Convert files to Word, PDF &amp; more</span><i class="s-rad"></i></button>
+      <button class="s-opt" data-pick="use:image" data-advance="try"><img src="assets/crop/ic-img2pdf.png" alt=""><span data-t="u_img">Turn documents into images</span><i class="s-rad"></i></button>
+      <button class="s-opt" data-pick="use:all" data-advance="try"><img src="assets/crop/ic-doc.png" alt=""><span data-t="u_all">Docs, Sheets &amp; Slides, a bit of everything</span><i class="s-rad"></i></button>
+    </div>
+  </div>
+</section>
+
+<section class="scr" data-id="try">
+  <div class="s-pad">
+    <div class="s-top"><button class="s-back" data-back aria-label="Back">‹</button><div class="s-prog"><i style="width:67%"></i></div></div>
+    <h1 class="s-h" data-t="t_t">Sign a PDF in one tap</h1>
+    <p class="s-p"><span data-t="t_s">No account needed. Next, we’ll set up your</span> <span data-bind="label:use"></span>.</p>
+    <div class="s-doc">
+      <div class="s-doch"><img src="assets/crop/ic-pdf.png" alt=""><span data-t="t_file">Offer_Letter.pdf</span></div>
+      <div class="s-doct" data-t="t_doc">Offer Letter</div>
+      <div class="s-ln" style="width:94%"></div><div class="s-ln" style="width:86%"></div><div class="s-ln" style="width:90%"></div><div class="s-ln" style="width:88%"></div><div class="s-ln" style="width:58%"></div>
+      <div class="s-sigl"><span data-t="t_sig">Signature</span><span class="s-today"></span></div>
+      <div class="s-sigbox" data-show="signed:no"><span data-t="t_tap">Tap below to sign here</span></div>
+      <div class="s-sigbox s-done" data-show="signed:yes"><svg class="s-sig" viewBox="0 0 220 70" aria-hidden="true"><path d="M8 52c10-30 22-46 30-38s-14 44-4 46 18-30 26-40 8 10 4 22 8 6 16-10 10-16 12-6-4 22 6 20 14-22 22-20 0 16 8 16 16-14 24-14 10 10 22 4 30-16 46-18"/></svg></div>
+    </div>
+    <div class="s-okc" data-show="signed:yes"><i></i><span data-t="t_ok">Signed. Ready to share as a PDF.</span></div>
+    <div class="s-more"><p data-t="t_more">Also in your trial</p><div class="s-tools"><span><img src="assets/crop/ic-pdfedit.png" alt="">PDF Edit</span><span><img src="assets/crop/ic-pdf2word.png" alt="">PDF to Word</span><span><img src="assets/crop/ic-img2pdf.png" alt="">Image to PDF</span></div></div>
+    <button class="s-btn" data-show="signed:no" data-pick="signed:yes"><span data-t="t_b">Add my signature</span></button>
+    <button class="s-btn s-go" data-show="signed:yes" data-go="ready"><span data-t="t_c">Continue</span></button>
+  </div>
+</section>
+
+<section class="scr s-white" data-id="ready">
+  <div class="s-pad">
+    <div class="s-top"><button class="s-back" data-back aria-label="Back">‹</button><div class="s-prog"><i style="width:100%"></i></div></div>
+    <h1 class="s-h s-c"><span data-t="r_t1">Your</span> <span data-bind="label:use"></span> <span data-t="r_t2">is ready</span></h1>
+    <div class="s-proofh"><i></i><span data-t="r_p">Chosen by 200M+ Users</span><i></i></div>
+    <div class="s-card s-proof">
+      <img src="assets/crop/art-proof.png" alt="">
+      <div class="s-cardt"><b data-t="r_h">60% Higher Work &amp; Learn Efficiency: Powered by WPS Office</b><span data-t="r_s">Lightning-Fast Document Processing &amp; Smart Image Refining</span></div>
+    </div>
+    <div class="s-rate"><span class="s-stars">★★★★★</span><b>4.8</b><span data-t="r_r">· 18K ratings on the App Store</span></div>
+    <button class="s-btn" data-go="paywall"><span data-t="r_c">Continue</span></button>
+  </div>
+</section>
+
+<section class="scr s-pw" data-id="paywall">
+  <button class="s-x" data-go="offer" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <div class="s-pad">
+    <h1 class="s-pwt" data-t="p_t">Free 3-Day Pro Trial</h1>
+    <p class="s-proofl"><span data-t="p_p">Chosen by 200M+ Users · <b>★ 4.8</b> on the App Store</span></p>
+    <div class="s-tl">
+      <div class="s-day"><img class="s-ic s-lk" src="assets/crop/ic-lock.png" alt=""><div><h4 data-t="p_d1">Day 1: Unlock All Features</h4>
+        <ul class="s-chk" id="pwChk">
+          <li data-k="pdf"><span data-t="p_l1">PDF Master: Edit, Annotate, Sign.</span></li>
+          <li data-k="convert"><span data-t="p_l2">File Converter: Convert All Formats.</span></li>
+          <li data-k="image"><span data-t="p_l3">Image Export: Doc-to-Pics.</span></li>
+        </ul></div><i class="s-rail s-on"></i></div>
+      <div class="s-day"><img class="s-ic" src="assets/crop/ic-bell.png" alt=""><div><h4 data-t="p_d2">Day 2: Trial Reminder</h4><p data-t="p_d2s">We'll remind you 1 day before your trial ends. You can cancel anytime.</p></div><i class="s-rail"></i></div>
+      <div class="s-day"><img class="s-ic" src="assets/crop/ic-cal.png" alt=""><div><h4 data-t="p_d3">Day 3: Keep Your Premium</h4><p><span data-t="p_d3s">Subscription starts</span> <span class="s-date"></span>. <span data-t="p_d3l">Lock in your Pro privileges.</span></p></div></div>
+    </div>
+    <div class="s-plans">
+      <button class="s-pl" data-pick="plan:year"><i class="s-rad"></i><span><b data-t="p_y">Yearly</b><small data-t="p_yb">Billed $35.99</small></span><span class="s-pr"><span data-t="p_ypm">$3.00</span><small data-t="p_mo">/Mo</small></span><em class="s-tag" data-t="p_save">SAVE 25%</em></button>
+      <button class="s-pl" data-pick="plan:month"><i class="s-rad"></i><span><b data-t="p_m">Monthly</b><small data-t="p_mb">Billed $3.99</small></span><span class="s-pr"><span data-t="p_mpm">$3.99</span><small data-t="p_mo">/Mo</small></span></button>
+    </div>
+    <button class="s-gcta" data-go="account"><span data-show="plan:year"><span data-t="p_c">Start 3-Day Free Trial</span></span><span data-show="plan:month"><span data-t="p_cm">Continue with Monthly</span></span></button>
+    <p class="s-bill"><span data-show="plan:year"><span data-t="p_by">Billed $35.99 yearly, cancel anytime</span></span><span data-show="plan:month"><span data-t="p_bm">Billed $3.99 monthly, cancel anytime</span></span></p>
+    <p class="s-rest" data-t="p_r">Restore Purchase</p>
+  </div>
+</section>
+
+<section class="scr sheet s-sh" data-id="offer">
+  <div class="s-sheetc">
+    <button class="s-cls" data-go="account" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    <div class="s-aih"><img src="assets/crop/ic-wpsai.png" alt="">WPS AI</div>
+    <h2 class="s-oh" data-t="o_t">Not ready for a full year?</h2>
+    <p class="s-p" data-t="o_s">Go month to month with WPS Pro AI. Everything in Pro, plus the AI tools.</p>
+    <div class="s-pl s-aipl on"><i class="s-rad"></i><span><b data-t="o_pn">Monthly</b><small data-t="o_pb">Billed $5.99</small></span><span class="s-pr"><span data-t="o_pm">$5.99</span><small data-t="p_mo">/Mo</small></span></div>
+    <ul class="s-chk s-aichk">
+      <li><span data-t="o_b1">PDF Edit, PDF to Word, PDF Signature</span></li>
+      <li><span data-t="o_b2">AI Translate in 57 languages</span></li>
+      <li><span data-t="o_b3">ChatPDF and AIGC</span></li>
+    </ul>
+    <button class="s-aicta" data-go="account"><b data-t="o_c">Start Monthly</b><small data-t="o_cs">Cancel anytime</small></button>
+    <button class="s-nothx" data-go="account"><span data-t="o_n">No thanks</span></button>
+  </div>
+</section>
+
+<section class="scr s-acc" data-id="account">
+  <div class="s-pad">
+    <div class="s-acct"><button class="s-back" data-back aria-label="Back">‹</button><span data-t="a_n">Save your work</span></div>
+    <img class="s-logo" src="assets/crop/wps-logo.png" alt="WPS">
+    <p class="s-tag2" data-t="a_tag">One account. All WPS services.</p>
+    <h1 class="s-h s-c" data-t="a_t">Keep your files</h1>
+    <p class="s-p s-c" data-t="a_s">Create your free account to keep your signed PDF in the cloud and open it on any device.</p>
+    <button class="s-sso s-a"><img src="assets/crop/ic-apple.png" alt=""><span data-t="w_a">Continue with Apple</span></button>
+    <button class="s-sso s-g"><img src="assets/crop/ic-google.png" alt=""><span data-t="w_g">Continue with Google</span></button>
+    <p class="s-mail" data-t="a_m">Use email instead</p>
+    <p class="s-legal" data-t="a_l">By proceeding, I agree to the <b>Online Service User Agreement</b>, <b>User Statement for Account</b>, <b>Service Agreement on WPS 365</b> and <b>Privacy Policy</b></p>
+  </div>
+</section>
+
+<section class="scr s-pw" data-id="today" data-aside>
+  <button class="s-x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <div class="s-pad">
+    <h1 class="s-pwt s-pwt0" data-t="p_t">Free 3-Day Pro Trial</h1>
+    <div class="s-tl s-tl0">
+      <div class="s-day"><img class="s-ic s-lk" src="assets/crop/ic-lock.png" alt=""><div><h4 data-t="p_d1">Day 1: Unlock All Features</h4>
+        <ul class="s-chk">
+          <li><span data-t="p_l1">PDF Master: Edit, Annotate, Sign.</span></li>
+          <li><span data-t="p_l2">File Converter: Convert All Formats.</span></li>
+          <li><span data-t="p_l3">Image Export: Doc-to-Pics.</span></li>
+        </ul></div><i class="s-rail s-on"></i></div>
+      <div class="s-day"><img class="s-ic" src="assets/crop/ic-bell.png" alt=""><div><h4 data-t="p_d2">Day 2: Trial Reminder</h4><p data-t="p_d2s">We'll remind you 1 day before your trial ends. You can cancel anytime.</p></div><i class="s-rail"></i></div>
+      <div class="s-day"><img class="s-ic" src="assets/crop/ic-cal.png" alt=""><div><h4 data-t="p_d3">Day 3: Keep Your Premium</h4><p><span data-t="p_d3s">Subscription starts</span> <span class="s-date"></span>. <span data-t="p_d3l">Lock in your Pro privileges.</span></p></div></div>
+    </div>
+    <button class="s-gcta" style="margin-top:auto"><span data-t="p_c">Start 3-Day Free Trial</span></button>
+    <p class="s-bill"><span data-t="p_by">Billed $35.99 yearly, cancel anytime</span></p>
+    <p class="s-rest" data-t="p_r">Restore Purchase</p>
+  </div>
+</section>
+<!-- SCREENS:END -->
+
+      </div></div>
+      <div class="au-pn" id="panel" aria-live="polite"></div>
+    </div>
+    <p class="au-hint">Close the paywall with ✕ to see idea 5.</p>
+    <!-- shown when CONTENT.liveUrl is set: assets/qr-app.png = qr.swift "<liveUrl>?app" -->
+    <div class="au-qr" id="qrCard" hidden><img src="assets/qr-app.png" alt="QR code that opens the prototype full screen"><div><b>Try it on your phone</b><p>Scan to open the prototype full screen, the way a new user would see it.</p></div></div>
+    <div class="au-mobw" id="qrMob" hidden><a class="au-btn" href="?app">Open it full screen</a></div>
+  </div>
+</section>
+
+<!-- the paywall TODAY vs PROPOSED — built from CONTENT.compare (stills: assets/hero/<today>.png, <proposed>.png) -->
+<section class="au-sec" id="compare" hidden><div class="au-wrap" id="cmpBody"></div></section>
+
+<footer class="au-foot" id="sources">
+  <div class="au-wrap">
+    <details id="srcDetails">
+      <summary>Where the numbers come from</summary>
+      <div class="au-srcs" id="srcBody"></div>
+    </details>
+    <p class="au-fine" id="fine"></p>
+    <div class="au-cta-line">
+      <p>Every screen here can be built and A/B tested in Adapty’s Flow Builder, with no app release.</p>
+      <a class="au-btn" href="https://adapty.io/flow-paywall-builder/" target="_blank" rel="noopener">About Flow Builder</a>
+    </div>
+  </div>
+</footer>
+
+<!-- extras: video dialog (CONTENT.video), ?app bar, ?tour overlay (CONTENT.tour) -->
+<dialog class="au-vid" id="vid" aria-label="Walkthrough video">
+  <div class="au-vid-in"><video id="vidEl" controls muted playsinline preload="none"></video></div>
+  <div class="au-vid-bar"><a id="vidDl" download>Download the MP4</a><button type="button" class="au-vid-x" id="vidX">Close</button></div>
+</dialog>
+<div class="au-scrim" id="abScrim"></div>
+<div class="au-appbar" id="appbar">
+  <button type="button" class="au-ab-why" id="abWhy"><i></i><span id="abT"></span><em>Why ↑</em></button>
+  <div class="au-lsw" id="abLang" role="group" aria-label="Language"></div>
+</div>
+<div class="au-tour" aria-hidden="true">
+  <div class="au-tb"><img src="assets/brand/appstore-icon.jpg" alt="">Growth Audit <small>· WPS Office</small></div>
+  <div class="au-tby">Prepared by Adapty</div>
+  <div class="au-tcap" id="tCap"></div>
+  <div class="au-ttap" id="tTap"></div>
+  <div class="au-tprog"><i id="tProg"></i></div>
+  <div class="au-tintro" id="tIntro"></div>
+  <div class="au-tend" id="tEnd"></div>
+</div>
+
+<!-- CONTENT — all the audit's words and numbers, as data. Schema (brand-check enforces it):
+     ideas  : 3–5 rows, ranked (the audit is five ideas, never fifteen). screen = the screen that shows it.
+     panel  : one entry per screen. idea = its number in ideas (1-based) or 0 for a context screen.
+              why on an idea screen reads "<b>Try</b> X, <b>because</b> Y." in ≤ 45 words; iv = its range.
+              why on a context screen is one line saying what it sets up.
+     hero   : three screen ids shown as stills in the hero — run hero-stills.sh after the screens are done.
+     outcome: combined "up to" numbers, PS-deck style, never above the ceiling of the per-idea ranges.
+     sources: public facts only — App Store, their site, their screens. No sales research on this page.
+     EXTRAS (each one hides itself when left empty):
+     langs  : [{"code":"en","name":"English"},{"code":"es","name":"Español · Spain prices"}] — first = the markup's language
+     i18n   : {"es": {"<data-t key>": "text with {tokens}"}} — every data-t key, for every language after the first
+     prices : {"es": {"yr": "39,99 €", …}} — {tokens} in i18n strings; that storefront's real IAP prices
+     labelsI18n: {"es": {"goal": {"a": "…"}}} — C.labels per language (data-bind="label:…")
+     liveUrl: final Pages URL (QR card + video end card); the QR file encodes liveUrl + "?app"
+     video / poster: "assets/walkthrough.mp4" / "assets/walkthrough-poster.jpg" (record-video.sh)
+     compare: {today, proposed, kicker, title, sub, todayCap, rows:[{h, idea, was, now}], kept} — today = a data-aside screen
+     tour   : {segments:[{id, d, st, tap:[selector-in-screen, ms], pop, reveal, end}], captions:{id:{n|k, t, l, o, ol}},
+              introLede, endTitle} — ~30 s total; the last segment has end:true (the end card) -->
+<script type="application/json" id="content">
+{
+ "app": "WPS Office",
+ "state": {
+  "use": "pdf",
+  "plan": "year",
+  "signed": "no"
+ },
+ "labels": {
+  "use": {
+   "pdf": "PDF toolkit",
+   "convert": "file converter",
+   "image": "image export",
+   "all": "Pro toolkit"
+  }
+ },
+ "chips": {
+  "welcome": "Welcome",
+  "use": "Question",
+  "try": "Quick win",
+  "ready": "Your toolkit",
+  "paywall": "Paywall",
+  "offer": "On close",
+  "account": "Account"
+ },
+ "hero": [
+  "try",
+  "paywall",
+  "ready"
+ ],
+ "outcome": {
+  "cr": "+20%",
+  "arpu": "+15%"
+ },
+ "ideas": [
+  {
+   "screen": "try",
+   "title": "Show value before the account",
+   "what": "Today a new user meets a country picker, an email, a password with three character rules and an emailed code before they see anything Pro does. Let them sign a PDF in one tap first, and ask for the account after the trial starts.",
+   "impact": "+10–20%",
+   "il": "CR to purchase"
+  },
+  {
+   "screen": "use",
+   "title": "Ask one question, then use the answer",
+   "what": "Nothing in today’s flow asks what someone came for. One question (PDFs, converting, images, or a bit of everything) names their toolkit before the paywall and decides which of your three Day 1 lines leads the trial.",
+   "impact": "+8–15%",
+   "il": "CR to purchase"
+  },
+  {
+   "screen": "ready",
+   "title": "Move “Chosen by 200M+ Users” to the decision",
+   "what": "Your strongest proof, plus the 4.8★ from 18K App Store ratings, only shows up on Payment Successful, after people have already decided. Put it on the screen before the paywall and under the paywall’s title.",
+   "impact": "+5–10%",
+   "il": "CR to purchase"
+  },
+  {
+   "screen": "paywall",
+   "title": "Say $3.00 a month, next to monthly",
+   "what": "The paywall shows one plan and “Billed $35.99 yearly”, with nothing to compare it to. Next to the $3.99 monthly plan, the year is $3.00 a month, 25% less, and a badge can say so.",
+   "impact": "+10–15%",
+   "il": "ARPU"
+  },
+  {
+   "screen": "offer",
+   "title": "Catch the people who close the paywall",
+   "what": "Today ✕ simply ends it. Answer it with WPS Pro AI at $5.99 a month: no year to commit to, and it includes the AI Translate your first slide promised, which Pro alone doesn’t.",
+   "impact": "+4–8%",
+   "il": "CR to purchase"
+  }
+ ],
+ "panel": {
+  "welcome": {
+   "idea": 0,
+   "t": "Your first slide, as it is",
+   "why": "Your carousel, word for word. Here Later, Google and Apple all lead straight on, with no password asked yet."
+  },
+  "use": {
+   "idea": 2,
+   "t": "Ask one question, then use the answer",
+   "why": "<b>Try</b> one question, “What will you use WPS for first?”, and carry the answer into the toolkit name and the paywall’s Day 1, <b>because</b> today every new user sees the same slides and the same paywall, whatever brought them.",
+   "iv": "CR +8–15%",
+   "il": "to purchase",
+   "also": "The answer comes back on the next three screens: the quick win, “Your PDF toolkit is ready” and the first Day 1 line."
+  },
+  "try": {
+   "idea": 1,
+   "t": "Show value before the account",
+   "why": "<b>Try</b> letting people sign a PDF before they make an account, and ask for the account after the trial starts, <b>because</b> today country, email, an 8–16 character password and an emailed code all come before any value.",
+   "iv": "CR +10–20%",
+   "il": "to purchase",
+   "also": "The account doesn’t go away: it moves to after the paywall, as one tap with Apple or Google."
+  },
+  "ready": {
+   "idea": 3,
+   "t": "Move “Chosen by 200M+ Users” to the decision",
+   "why": "<b>Try</b> showing your “Chosen by 200M+ Users” card and the 4.8★ rating right before the paywall, <b>because</b> today that proof only appears on Payment Successful, after the decision is made.",
+   "iv": "CR +5–10%",
+   "il": "to purchase",
+   "also": "The same line sits under the paywall’s title on the next screen."
+  },
+  "paywall": {
+   "idea": 4,
+   "t": "Say $3.00 a month, next to monthly",
+   "why": "<b>Try</b> showing the year as $3.00 a month beside the $3.99 monthly plan, with a Save 25% badge, <b>because</b> today the paywall shows one line, “Billed $35.99 yearly”, and nothing to compare it with.",
+   "iv": "ARPU +10–15%",
+   "il": "more people on the yearly plan",
+   "also": "Also on this screen: idea 2 (the line they picked leads Day 1) and idea 3 (200M+ users and 4.8★ under the title)."
+  },
+  "offer": {
+   "idea": 5,
+   "t": "Catch the people who close the paywall",
+   "why": "<b>Try</b> answering ✕ with WPS Pro AI at $5.99 a month, <b>because</b> people who close a yearly paywall are often saying no to the year, and your first slide sold AI Translate, which Pro alone doesn’t include.",
+   "iv": "CR +4–8%",
+   "il": "from people who close the paywall"
+  },
+  "account": {
+   "idea": 0,
+   "t": "Where the sign-up went",
+   "why": "After the trial starts: one tap with Apple or Google, framed as keeping the PDF they just signed."
+  }
+ },
+ "langs": [
+  {
+   "code": "en",
+   "name": "English"
+  },
+  {
+   "code": "es",
+   "name": "Español · Mexico prices"
+  }
+ ],
+ "i18n": {
+  "es": {
+   "later": "Más tarde",
+   "w_t": "Eficiencia con IA",
+   "w_s": "Traducción con IA, creación y edición inteligentes",
+   "w_g": "Continuar con Google",
+   "w_a": "Continuar con Apple",
+   "w_l": "Si continúas, aceptas la <b>Política de privacidad</b>, el <b>Contrato de licencia de usuario final</b>, el <b>Acuerdo de servicio de WPS 365</b> y el <b>Acuerdo de usuario del servicio en línea</b>.",
+   "u_t": "¿Para qué usarás WPS primero?",
+   "u_s": "Lo pondremos al principio de tu prueba gratis.",
+   "u_pdf": "Editar, anotar y firmar PDF",
+   "u_conv": "Convertir archivos a Word, PDF y más",
+   "u_img": "Convertir documentos en imágenes",
+   "u_all": "Docs, Sheets y Slides, un poco de todo",
+   "t_t": "Firma un PDF con un toque",
+   "t_s": "Sin crear cuenta. Después prepararemos tu",
+   "t_file": "Carta_de_oferta.pdf",
+   "t_doc": "Carta de oferta",
+   "t_sig": "Firma",
+   "t_tap": "Toca abajo para firmar aquí",
+   "t_ok": "Firmado. Listo para compartir en PDF.",
+   "t_b": "Añadir mi firma",
+   "t_c": "Continuar",
+   "r_t1": "Tu",
+   "r_t2": "está listo",
+   "r_p": "Elegido por más de 200 M de usuarios",
+   "r_h": "60 % más eficiencia en el trabajo y el estudio: con WPS Office",
+   "r_s": "Procesamiento de documentos ultrarrápido y mejora inteligente de imágenes",
+   "r_r": "· 2,571 calificaciones en México",
+   "r_c": "Continuar",
+   "p_t": "3 días de Pro gratis",
+   "p_p": "Más de 200 M de usuarios · <b>★ 4.8</b> en el App Store",
+   "p_d1": "Día 1: Desbloquea todo",
+   "p_l1": "PDF Master: edita, anota y firma.",
+   "p_l2": "Conversor: todos los formatos.",
+   "p_l3": "Exportar imagen: de documento a imagen.",
+   "p_d2": "Día 2: Recordatorio",
+   "p_d2s": "Te avisaremos 1 día antes de que termine la prueba. Cancela cuando quieras.",
+   "p_d3": "Día 3: Conserva tu Premium",
+   "p_d3s": "La suscripción empieza el",
+   "p_d3l": "Asegura tus privilegios Pro.",
+   "p_y": "Anual",
+   "p_yb": "Se cobra {yr}",
+   "p_ypm": "{pm}",
+   "p_mo": "/mes",
+   "p_save": "AHORRA {save}",
+   "p_m": "Mensual",
+   "p_mb": "Se cobra {mo}",
+   "p_mpm": "{mo}",
+   "p_c": "Probar 3 días gratis",
+   "p_cm": "Continuar con el mensual",
+   "p_by": "Se cobra {yr} al año, cancela cuando quieras",
+   "p_bm": "Se cobra {mo} al mes, cancela cuando quieras",
+   "p_r": "Restaurar compra",
+   "o_t": "¿Aún no quieres un año completo?",
+   "o_s": "Ve mes a mes con WPS Pro AI. Todo lo de Pro, más las herramientas de IA.",
+   "o_pn": "Mensual",
+   "o_pb": "Se cobra {ai}",
+   "o_pm": "{ai}",
+   "o_b1": "Editar PDF, PDF a Word, firma de PDF",
+   "o_b2": "AI Translate en 57 idiomas",
+   "o_b3": "ChatPDF y AIGC",
+   "o_c": "Empezar el mensual",
+   "o_cs": "Cancela cuando quieras",
+   "o_n": "No, gracias",
+   "a_n": "Guarda tu trabajo",
+   "a_tag": "Una cuenta. Todos los servicios de WPS.",
+   "a_t": "Conserva tus archivos",
+   "a_s": "Crea tu cuenta gratis para guardar tu PDF firmado en la nube y abrirlo en cualquier dispositivo.",
+   "a_m": "Usar correo electrónico",
+   "a_l": "Al continuar, acepto el <b>Acuerdo de usuario del servicio en línea</b>, la <b>Declaración de usuario de la cuenta</b>, el <b>Acuerdo de servicio de WPS 365</b> y la <b>Política de privacidad</b>",
+   "t_more": "También en tu prueba"
+  }
+ },
+ "prices": {
+  "es": {
+   "yr": "$799.00",
+   "mo": "$79.00",
+   "pm": "$66.58",
+   "save": "16%",
+   "ai": "$129.00"
+  }
+ },
+ "labelsI18n": {
+  "es": {
+   "use": {
+    "pdf": "kit de PDF",
+    "convert": "conversor de archivos",
+    "image": "exportador de imágenes",
+    "all": "kit Pro"
+   }
+  }
+ },
+ "liveUrl": "https://eddieatadapty.github.io/wps-flow-rebuild/",
+ "video": "assets/walkthrough.mp4",
+ "poster": "assets/walkthrough-poster.jpg",
+ "compare": {
+  "today": "today",
+  "proposed": "paywall",
+  "kicker": "The paywall, side by side",
+  "title": "Today and proposed.",
+  "sub": "Same timeline, same trial, same button.",
+  "todayCap": "rebuilt from your recorded flow",
+  "rows": [
+   {
+    "h": "Before the paywall",
+    "idea": 1,
+    "was": "Country, email, password rules and an emailed code",
+    "now": "One question and a signed PDF; the account comes after"
+   },
+   {
+    "h": "Day 1",
+    "idea": 2,
+    "was": "The same three lines for everyone",
+    "now": "The line they picked comes first"
+   },
+   {
+    "h": "Proof",
+    "idea": 3,
+    "was": "“Chosen by 200M+ Users” only after payment",
+    "now": "Under the title: 200M+ users · ★ 4.8"
+   },
+   {
+    "h": "Price",
+    "idea": 4,
+    "was": "One plan: “Billed $35.99 yearly”",
+    "now": "$3.00/Mo yearly beside $3.99 monthly · Save 25%"
+   },
+   {
+    "h": "On close",
+    "idea": 5,
+    "was": "✕ ends it",
+    "now": "WPS Pro AI at $5.99 a month, cancel anytime"
+   }
+  ],
+  "kept": "Kept from today: the headline, the 3-day timeline, “Start 3-Day Free Trial”, the gradient button and Restore Purchase."
+ },
+ "tour": {
+  "introLede": "Five ideas to turn more WPS Office users into subscribers.",
+  "endTitle": "Five ideas, built into your own onboarding.",
+  "segments": [
+   {
+    "id": "welcome",
+    "d": 3200,
+    "tap": [
+     ".s-later",
+     2600
+    ]
+   },
+   {
+    "id": "use",
+    "d": 2200,
+    "tap": [
+     "[data-pick=\"use:pdf\"]",
+     1700
+    ]
+   },
+   {
+    "id": "use",
+    "d": 700,
+    "st": {
+     "use": "pdf"
+    }
+   },
+   {
+    "id": "try",
+    "d": 2400,
+    "st": {
+     "signed": "no"
+    },
+    "tap": [
+     ".s-btn",
+     1900
+    ]
+   },
+   {
+    "id": "try",
+    "d": 2200,
+    "st": {
+     "signed": "yes"
+    },
+    "pop": ".s-sig",
+    "tap": [
+     ".s-go",
+     1750
+    ]
+   },
+   {
+    "id": "ready",
+    "d": 3000,
+    "reveal": ".s-rate",
+    "tap": [
+     ".s-btn",
+     2500
+    ]
+   },
+   {
+    "id": "paywall",
+    "d": 3200,
+    "tap": [
+     "[data-pick=\"plan:month\"]",
+     2700
+    ]
+   },
+   {
+    "id": "paywall",
+    "d": 1600,
+    "st": {
+     "plan": "month"
+    },
+    "tap": [
+     "[data-pick=\"plan:year\"]",
+     1150
+    ]
+   },
+   {
+    "id": "paywall",
+    "d": 1400,
+    "st": {
+     "plan": "year"
+    },
+    "tap": [
+     ".s-x",
+     950
+    ]
+   },
+   {
+    "id": "offer",
+    "d": 3400,
+    "tap": [
+     ".s-nothx",
+     2900
+    ]
+   },
+   {
+    "id": "account",
+    "d": 2800
+   },
+   {
+    "id": "account",
+    "d": 3000,
+    "end": true
+   }
+  ],
+  "captions": {
+   "welcome": {
+    "k": "Context",
+    "t": "Your first slide, as it is",
+    "l": "Later, Google or Apple all lead on. No password yet."
+   },
+   "use": {
+    "n": 2,
+    "t": "Ask one question",
+    "l": "What they came for decides what the trial leads with.",
+    "o": "CR +8–15%",
+    "ol": "to purchase"
+   },
+   "try": {
+    "n": 1,
+    "t": "Value before the account",
+    "l": "Sign a PDF in one tap. Sign-up waits until after the trial starts.",
+    "o": "CR +10–20%",
+    "ol": "to purchase"
+   },
+   "ready": {
+    "n": 3,
+    "t": "Proof where they decide",
+    "l": "“Chosen by 200M+ Users” moves before payment, not after.",
+    "o": "CR +5–10%",
+    "ol": "to purchase"
+   },
+   "paywall": {
+    "n": 4,
+    "t": "$3.00 a month, next to monthly",
+    "l": "The year per month, beside $3.99 monthly. Save 25%.",
+    "o": "ARPU +10–15%",
+    "ol": "more people on yearly"
+   },
+   "offer": {
+    "n": 5,
+    "t": "Catch the people who close",
+    "l": "WPS Pro AI at $5.99 a month. No year to commit to.",
+    "o": "CR +4–8%",
+    "ol": "from people who close"
+   },
+   "account": {
+    "k": "Context",
+    "t": "The account, moved",
+    "l": "After the trial starts: one tap to keep their work."
+   }
+  }
+ },
+ "grounding": "Impact ranges are Adapty’s expected effect from teardowns and A/B tests across 30,000+ subscription apps, not measured lift for WPS Office. They overlap, so they don’t add up.",
+ "sources": [
+  {
+   "group": "Prices",
+   "items": [
+    {
+     "dt": "$35.99 a year · WPS Pro Yearly",
+     "dd": "Your recorded onboarding paywall (“Billed $35.99 yearly”) and its App Store sheet (“WPS Pro Yearly, $35.99 per year”); listed in <a href=\"https://apps.apple.com/us/app/wps-office-ai-doc-pdf-sheet/id1491101673\" target=\"_blank\" rel=\"noopener\">App Store (US), In-App Purchases</a>."
+    },
+    {
+     "dt": "$3.99 a month · WPS VIP Monthly",
+     "dd": "App Store (US), In-App Purchases. We used it as the monthly plan next to the year; if VIP is a different tier from Pro, tell us and we’ll swap it."
+    },
+    {
+     "dt": "$5.99 a month · WPS Pro AI Monthly",
+     "dd": "App Store (US), In-App Purchases. Used for the offer on close."
+    },
+    {
+     "dt": "$3.00 a month · Save 25%",
+     "dd": "Worked out: $35.99 ÷ 12 = $3.00; $35.99 against 12 × $3.99 = $47.88 is 25% less."
+    },
+    {
+     "dt": "Spanish prices: $799.00 · $79.00 · $129.00",
+     "dd": "<a href=\"https://apps.apple.com/mx/app/wps-office-ai-doc-pdf-sheet/id1491101673\" target=\"_blank\" rel=\"noopener\">App Store (Mexico), In-App Purchases</a>: WPS Pro Yearly, WPS VIP Mensual, WPS Pro AI Monthly. $66.58 a month and 16% are worked out the same way. Mexico lists WPS Pro Yearly at both $799.00 and $599.00; we used $799.00, matching $35.99 as the higher US price."
+    },
+    {
+     "dt": "Not used",
+     "dd": "WPS Pro Yearly $29.99 and $17.99; WPS Pro AI Yearly $35.99 and $25.49; WPS 1-Year Plan $55.99 and $25.99; WPS Pro + WPS AI 1-Year Plan $131.99 (regional, legacy or bundle prices on the US listing). The $85.99 / $19.99 plans on your in-app WPS AI paywall aren’t in the listing’s In-App Purchases, so we didn’t use them."
+    }
+   ]
+  },
+  {
+   "group": "Proof",
+   "items": [
+    {
+     "dt": "4.8★ · 18K ratings",
+     "dd": "App Store (US): 4.76 from 18,378 ratings, rounded the way the App Store shows it."
+    },
+    {
+     "dt": "4.8★ · 2,571 ratings (Spanish version)",
+     "dd": "App Store (Mexico): 4.79 from 2,571 ratings."
+    },
+    {
+     "dt": "“Chosen by 200M+ Users”, “60% Higher Work & Learn Efficiency”",
+     "dd": "Your own Payment Successful screen, word for word, with its illustration."
+    }
+   ]
+  },
+  {
+   "group": "Features and copy",
+   "items": [
+    {
+     "dt": "Carousel, paywall and sign-up copy",
+     "dd": "Your live iOS flow as recorded by ScreensDesign (splash, ATT, three carousel slides, sign-up, verification code, paywall, Payment Successful), kept word for word where a screen is kept."
+    },
+    {
+     "dt": "AI Translate isn’t in WPS Pro",
+     "dd": "Your in-app Benefit Comparison (Standard · WPS Pro · WPS AI). The offer’s three benefit lines come from that table."
+    },
+    {
+     "dt": "The question’s answers",
+     "dd": "Map to your own three Day 1 lines (PDF Master, File Converter, Image Export), plus “a bit of everything”."
+    },
+    {
+     "dt": "Spanish copy",
+     "dd": "Our translation, not yours. Your carousel already pairs English with Español."
+    },
+    {
+     "dt": "New copy",
+     "dd": "The question, the quick-win screen, “Your PDF toolkit is ready”, the plan cards and the offer are ours, written in your voice."
+    }
+   ]
+  },
+  {
+   "group": "Design",
+   "items": [
+    {
+     "dt": "Colours",
+     "dd": "Sampled from your recorded screens: #3952f7 buttons, the #44baf9 → #255af6 → #7335f2 trial button, the #2400f3 → #bb00aa → #f1541d WPS AI button, #7a39ed AI purple, #61c999 success green. Site palette from wps.com (#1f69e0 #3684e4 #4098ff) for this page’s accents."
+    },
+    {
+     "dt": "Type",
+     "dd": "Your app uses the iOS system font; we used Inter, your website’s font, as the closest Google family."
+    },
+    {
+     "dt": "Art and icons",
+     "dd": "Cut from your own screens: the English/Español card, the 200M+ illustration, the trial-timeline icons, the PDF Edit / PDF to Word / Image to PDF icons, the WPS and WPS AI marks. The document and signature on the quick win are drawn in your colours."
+    }
+   ]
+  },
+  {
+   "group": "What we couldn’t see",
+   "items": [
+    {
+     "dt": "Your test history and numbers",
+     "dd": "We work from the outside, so we don’t know what you’ve tested or how each step converts today."
+    },
+    {
+     "dt": "Whether Pro can be bought before an account exists",
+     "dd": "If an account is needed to carry Pro across devices, the account screen can still come straight after the purchase."
+    },
+    {
+     "dt": "Mexico specifics",
+     "dd": "Which Pro Yearly price Mexico’s paywall shows, and whether the 3-day trial runs there. Whether the monthly plan carries a trial."
+    }
+   ]
+  }
+ ]
+}
+</script>
+
+<script>
+/* WPS hooks: the trial-end date in their format (2026-03-29 / 29 de marzo de 2026), the picked Day 1 line first, the quick win fresh on entry */
+window.onSync = function(S){
+  var d = new Date(); d.setDate(d.getDate() + 3);
+  var M = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var p2 = function(n){ return (n < 10 ? '0' : '') + n; };
+  var txt = S.lang === 'es' ? d.getDate() + ' de ' + M[d.getMonth()] + ' de ' + d.getFullYear() : d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate());
+  document.querySelectorAll('.s-date').forEach(function(e){ e.textContent = txt; });
+  var n = new Date(), td = S.lang === 'es' ? n.getDate() + ' de ' + M[n.getMonth()] + ' de ' + n.getFullYear() : n.getFullYear() + '-' + p2(n.getMonth() + 1) + '-' + p2(n.getDate());
+  document.querySelectorAll('.s-today').forEach(function(e){ e.textContent = td; });
+  var ul = document.getElementById('pwChk');
+  if (ul) ul.querySelectorAll('li').forEach(function(li){ var on = li.dataset.k === S.use; li.classList.toggle('pick', on); li.style.order = on ? -1 : 0; });
+};
+window.onEnter = function(id, S){ if (id === 'try') { S.signed = HERO ? 'yes' : 'no'; sync(); } };
+</script>
+<script>
+/* ============ engine — generic, do not fork per app ============ */
+var C = JSON.parse(document.getElementById('content').textContent);
+var S = C.state, scr = {}, ORDER = [], hist = [], cur = null, Q = location.search;
+var SHOT = /[?&](shot|phone|tour)\b/.test(Q), HERO = /[?&]hero\b/.test(Q);
+/* a screen with data-aside (e.g. the paywall TODAY for the side-by-side) renders for stills but is not part of the flow */
+document.querySelectorAll('.scr').forEach(function(s){ scr[s.dataset.id] = s; if (!s.hasAttribute('data-aside')) ORDER.push(s.dataset.id); });
+if (/[?&]shot\b/.test(Q)) document.documentElement.classList.add('shot');
+if (/[?&]phone\b/.test(Q)) document.documentElement.classList.add('shot', 'phoneonly');
+if (/[?&]clear\b/.test(Q)) document.documentElement.classList.add('clear');
+var IDEAS = (C.ideas || []).length;
+
+/* ---- languages: markup is the first language; C.i18n[lang][data-t key] the others; {tokens} from C.prices[lang] ---- */
+var LANGS = C.langs || [], BASE = LANGS.length ? LANGS[0].code : 'en', LANG_DONE = BASE, BASE_LABELS = JSON.parse(JSON.stringify(C.labels || {}));
+if (!S.lang) S.lang = BASE;
+function fillP(s, l){ var P = (C.prices || {})[l] || {}; return String(s).replace(/\{(\w+)\}/g, function(m, k){ return k in P ? P[k] : m; }); }
+function applyLang(){
+  var l = S.lang || BASE; if (l === LANG_DONE) return;
+  var T = (C.i18n || {})[l] || {};
+  document.querySelectorAll('.phone [data-t]').forEach(function(el){
+    if (el._base == null) el._base = el.innerHTML;
+    el.innerHTML = l === BASE || T[el.dataset.t] == null ? el._base : fillP(T[el.dataset.t], l);
+  });
+  C.labels = JSON.parse(JSON.stringify(BASE_LABELS));
+  var LL = (C.labelsI18n || {})[l] || {}; Object.keys(LL).forEach(function(k){ C.labels[k] = LL[k]; });
+  LANG_DONE = l;
+}
+function setLang(l){
+  if (!LANGS.some(function(x){ return x.code === l; })) return;
+  S.lang = l; sync();
+  document.querySelectorAll('[data-setlang]').forEach(function(b){ b.classList.toggle('on', b.dataset.setlang === l); });
+  if (window.onLang) window.onLang(l);
+}
+
+function lab(key){ var v = S[key]; var L = C.labels[key]; if (Array.isArray(v)) return v.map(function(x){ return L && L[x] || x; }).join(', '); return (L && L[v]) || v; }
+function sync(){
+  applyLang();
+  document.querySelectorAll('[data-bind]').forEach(function(el){
+    var b = el.dataset.bind, m = b.split(':');
+    el.textContent = m[0] === 'label' ? lab(m[1]) : m[0] === 'count' ? (S[m[1]] || []).length : (S[b] == null ? '' : S[b]);
+  });
+  document.querySelectorAll('[data-pick]').forEach(function(el){ var p = el.dataset.pick.split(':'); el.classList.toggle('on', S[p[0]] === p[1]); });
+  document.querySelectorAll('[data-toggle]').forEach(function(el){ var p = el.dataset.toggle.split(':'); el.classList.toggle('on', (S[p[0]] || []).indexOf(p[1]) > -1); });
+  document.querySelectorAll('[data-requires]').forEach(function(el){ el.disabled = !(S[el.dataset.requires] || []).length; });
+  document.querySelectorAll('[data-show]').forEach(function(el){ var p = el.dataset.show.split(':'); el.style.display = String(S[p[0]]) === p[1] ? '' : 'none'; });
+  if (window.onSync) window.onSync(S);
+}
+function show(id, dir){
+  var from = scr[cur], to = scr[id]; if (!to || id === cur) return;
+  var sheet = to.classList.contains('sheet');
+  if (from){
+    from.classList.remove('is-active');
+    if (sheet) from.classList.add('under');                                   /* a sheet slides up over the screen that opened it */
+    else if (dir === 'fwd' && !from.classList.contains('sheet')) from.classList.add('is-past');
+  }
+  if (!sheet) Object.keys(scr).forEach(function(k){ var u = scr[k]; if (u !== to && u.classList.contains('under')) { u.classList.remove('under'); if (dir === 'fwd') u.classList.add('is-past'); } });
+  to.classList.remove('is-past', 'under'); to.classList.add('is-active'); cur = id;
+  paint(); if (window.onEnter) window.onEnter(id, S);
+}
+function go(id){ if (cur) hist.push(cur); show(id, 'fwd'); }
+function back(){ if (hist.length) { var p = hist.pop(); scr[cur].classList.remove('is-active'); show(p, 'back'); } }
+function jump(id){
+  Object.keys(scr).forEach(function(k){ scr[k].classList.add('nofx'); scr[k].classList.remove('is-active', 'is-past', 'under'); });
+  var i = ORDER.indexOf(id); hist = ORDER.slice(0, i < 0 ? 0 : i); cur = null;
+  ORDER.slice(0, i).forEach(function(k){ if (!scr[k].classList.contains('sheet')) scr[k].classList.add('is-past'); });
+  if (scr[id] && scr[id].classList.contains('sheet')) {                        /* jumping to a sheet: its opener stays visible under it */
+    for (var j = i - 1; j >= 0; j--) if (!scr[ORDER[j]].classList.contains('sheet')) { scr[ORDER[j]].classList.remove('is-past'); scr[ORDER[j]].classList.add('under'); break; }
+  }
+  show(id, 'jump');
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ Object.keys(scr).forEach(function(k){ scr[k].classList.remove('nofx'); }); }); });
+}
+function stepBy(d){ var i = ORDER.indexOf(cur) + d; if (i >= 0 && i < ORDER.length) jump(ORDER[i]); }
+function jumpTo(id){
+  var p = document.getElementById('prototype');
+  if (p && !document.documentElement.classList.contains('appmode')) p.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+  jump(id);
+}
+function paint(){
+  sync();
+  var c = document.getElementById('chips');
+  if (!c.childElementCount) ORDER.forEach(function(id){
+    var p = C.panel[id] || {}, b = document.createElement('button');
+    b.className = 'au-chip'; b.type = 'button'; b.dataset.id = id; b.setAttribute('role', 'tab');
+    b.innerHTML = (p.idea ? '<i>' + p.idea + '</i>' : '') + ((C.chips && C.chips[id]) || id);
+    b.onclick = function(){ jump(id); };
+    c.appendChild(b);
+  });
+  c.querySelectorAll('.au-chip').forEach(function(b){ var on = b.dataset.id === cur; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  var d = C.panel[cur] || {t: cur, why: ''}, n = ORDER.indexOf(cur) + 1;
+  document.getElementById('panel').innerHTML =
+    (d.idea ? '<div class="au-pn-k"><i></i>Idea ' + d.idea + ' of ' + IDEAS + '</div>' : '<div class="au-pn-k au-ctx"><i></i>Context</div>') +
+    '<h3 class="au-pn-t">' + d.t + '</h3><p class="au-pn-h">' + d.why + '</p>' +
+    (d.iv ? '<div class="au-pn-o"><div class="au-lab">Potential outcome · based on Adapty data</div><div class="au-val"><mark>' + d.iv + '</mark></div><div class="au-sub">' + (d.il || '') + '</div></div>' : '') +
+    (d.also ? '<p class="au-pn-a">' + d.also + '</p>' : '') +
+    '<div class="au-pn-nav"><button type="button" onclick="stepBy(-1)"' + (n <= 1 ? ' disabled' : '') + '>‹ Previous</button><span>Screen ' + n + ' of ' + ORDER.length + '</span><button type="button" onclick="stepBy(1)"' + (n === ORDER.length ? ' disabled' : '') + '>Next ›</button></div>';
+  var ab = document.getElementById('abT'); if (ab) ab.textContent = (d.idea ? 'Idea ' + d.idea + ' of ' + IDEAS + ' · ' : '') + (d.t || '');
+}
+document.addEventListener('click', function(e){
+  var j = e.target.closest('[data-jumpto]'); if (j){ e.preventDefault(); jumpTo(j.dataset.jumpto); return; }
+  var L = e.target.closest('[data-setlang]'); if (L){ setLang(L.dataset.setlang); return; }
+  if (e.target.closest('[data-langtoggle]') && LANGS.length > 1){ var k = LANGS.findIndex(function(x){ return x.code === S.lang; }); setLang(LANGS[(k + 1) % LANGS.length].code); return; }
+  var el = e.target.closest('[data-go],[data-back],[data-pick],[data-toggle]'); if (!el) return;
+  if (el.dataset.pick){ var p = el.dataset.pick.split(':'); S[p[0]] = p[1]; sync(); if (el.dataset.advance) setTimeout(function(){ go(el.dataset.advance); }, 170); return; }
+  if (el.dataset.toggle){ var q = el.dataset.toggle.split(':'), a = S[q[0]] = S[q[0]] || [], i = a.indexOf(q[1]); if (i > -1) a.splice(i, 1); else a.push(q[1]); sync(); return; }
+  if ('back' in el.dataset) return back();
+  go(el.dataset.go);
+});
+document.querySelectorAll('[data-input]').forEach(function(inp){
+  inp.value = S[inp.dataset.input] || ''; inp.addEventListener('input', function(){ S[inp.dataset.input] = inp.value.trim() || 'there'; sync(); });
+});
+function $(id){ return document.getElementById(id); }
+
+/* hero stills, shortlist, outcome, sources — from CONTENT */
+$('heroPhones').innerHTML = (C.hero || []).map(function(id, i){
+  var pos = ['l', 'c', 'r'][i] || 'r', t = (C.chips && C.chips[id]) || id;
+  return '<button class="au-hp au-' + pos + '" data-jumpto="' + id + '" aria-label="Open ' + t + '"><img src="assets/hero/' + id + '.png" alt=""></button>';
+}).join('');
+$('ideaList').innerHTML = (C.ideas || []).map(function(r, i){
+  return '<article class="au-idea"><div class="au-num">0' + (i + 1) + '</div><div><h3>' + r.title + '</h3><p>' + r.what + '</p>' +
+    '<button type="button" class="au-lnk" data-jumpto="' + r.screen + '">See it on the screen</button></div>' +
+    '<div class="au-imp"><div class="au-v"><mark>' + r.impact + '</mark></div><div class="au-l">' + r.il + '</div></div></article>';
+}).join('');
+var O = C.outcome || {};
+$('bandNums').innerHTML =
+  (O.cr ? '<div><small>up to</small><b>' + O.cr + '</b><span>CR to purchase</span></div>' : '') +
+  (O.arpu ? '<div><small>up to</small><b>' + O.arpu + '</b><span>ARPU</span></div>' : '');
+$('bandFn').textContent = C.grounding;
+$('fine').textContent = C.grounding + ' Prepared by Adapty.';
+$('srcBody').innerHTML = C.sources.map(function(g){
+  return '<div><h4>' + g.group + '</h4><dl>' + g.items.map(function(it){ return '<dt>' + it.dt + '</dt><dd>' + it.dd + '</dd>'; }).join('') + '</dl></div>';
+}).join('');
+function openSrc(){ var d = $('srcDetails'); d.open = true; d.scrollIntoView({block: 'start'}); }
+
+/* ---- extras: language control, the paywall side by side, QR / phone view, the video ---- */
+if (LANGS.length > 1) {
+  $('langRow').hidden = false;
+  var lb = LANGS.map(function(x){ return '<button type="button" data-setlang="' + x.code + '">' + x.name + '</button>'; }).join('');
+  $('langSw').innerHTML = lb;
+  $('abLang').innerHTML = LANGS.map(function(x){ return '<button type="button" data-setlang="' + x.code + '">' + x.code.toUpperCase() + '</button>'; }).join('');
+}
+var CM = C.compare;
+if (CM && scr[CM.today] && scr[CM.proposed]) {
+  $('compare').hidden = false; $('navCompare').hidden = false;
+  $('cmpBody').innerHTML = '<div class="au-ideas-h"><p class="au-kicker">' + (CM.kicker || 'The paywall, side by side') + '</p><h2 class="au-h2">' + (CM.title || 'Today and proposed.') + (CM.sub ? ' <span>' + CM.sub + '</span>' : '') + '</h2></div>' +
+    '<div class="au-cmp"><figure><img src="assets/hero/' + CM.today + '.png" alt="Your paywall today"><figcaption>Today <span>· ' + (CM.todayCap || 'rebuilt from your recording') + '</span></figcaption></figure>' +
+    '<ol class="au-chg">' + (CM.rows || []).map(function(r){
+      return '<li><h4>' + r.h + (r.idea ? ' <i>Idea ' + r.idea + '</i>' : '') + '</h4><span class="au-was"><em>Today</em>' + r.was + '</span><span class="au-now"><em>Proposed</em>' + r.now + '</span></li>';
+    }).join('') + '</ol>' +
+    '<figure><button type="button" class="au-cmp-go" data-jumpto="' + CM.proposed + '" aria-label="Open the proposed paywall"><img src="assets/hero/' + CM.proposed + '.png" alt="The proposed paywall"></button><figcaption>Proposed <span>· tap to try it</span></figcaption></figure></div>' +
+    (CM.kept ? '<p class="au-kept">' + CM.kept + '</p>' : '');
+}
+if (C.liveUrl) { $('qrCard').hidden = false; $('qrMob').hidden = false; }
+if (/[?&]app\b/.test(Q)) {
+  var H0 = document.documentElement; H0.classList.add('appmode');
+  var openP = function(o){ H0.classList.toggle('au-open', o); $('abWhy').querySelector('em').textContent = o ? 'Close ↓' : 'Why ↑'; };
+  $('abWhy').onclick = function(){ openP(!H0.classList.contains('au-open')); };
+  $('abScrim').onclick = function(){ openP(false); };
+}
+if (C.video) {
+  var dlg = $('vid'), vel = $('vidEl'); vel.src = C.video; if (C.poster) vel.poster = C.poster; $('vidDl').href = C.video;
+  $('heroVideo').hidden = false;
+  $('heroVideo').onclick = function(){ dlg.showModal(); vel.play().catch(function(){}); };
+  $('vidX').onclick = function(){ dlg.close(); };
+  dlg.addEventListener('close', function(){ vel.pause(); });
+  dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
+}
+
+/* ---- ?tour: a deterministic walkthrough from C.tour — tourAt(ms) paints one frame; record-video.sh records it ---- */
+function tourInit(){
+  var T = C.tour, H = document.documentElement, TR = T.transition || 360;
+  H.classList.add('tourmode', 'shot'); document.body.classList.add('nofx');
+  var SEG = T.segments, START = [], STATE = [], UNDER = [], acc = 0, st = JSON.parse(JSON.stringify(C.state));
+  SEG.forEach(function(s, i){
+    START.push(acc); acc += s.d;
+    Object.keys(s.st || {}).forEach(function(k){ st[k] = s.st[k]; }); STATE.push(JSON.parse(JSON.stringify(st)));
+    var u = null; if (scr[s.id].classList.contains('sheet')) for (var j = i - 1; j >= 0; j--) if (!scr[SEG[j].id].classList.contains('sheet')) { u = SEG[j].id; break; }
+    UNDER.push(u);
+  });
+  var TOTAL = acc, capEl = $('tCap'), tap = $('tTap'), pressed = null, popped = [];
+  $('tIntro').innerHTML = '<p class="au-eyebrow"><i></i>' + document.querySelector('.au-top-hero .au-eyebrow').textContent + '</p><h1 class="au-display">' + C.app + '</h1>' +
+    '<p class="au-lede">' + (T.introLede || document.querySelector('.au-top-hero .au-lede').innerHTML) + '</p>';
+  $('tEnd').innerHTML = '<p class="au-eyebrow"><i></i>Growth Audit · ' + C.app + '</p><h2 class="au-te-h">' + (T.endTitle || 'Five ideas, built into your own onboarding.') + '</h2>' +
+    '<div class="au-te-n">' + (O.cr ? '<div><small>up to</small><b>' + O.cr + '</b><span>CR to purchase</span></div>' : '') + (O.arpu ? '<div><small>up to</small><b>' + O.arpu + '</b><span>ARPU</span></div>' : '') + '</div>' +
+    (C.liveUrl ? '<div class="au-te-q"><img src="assets/qr-app.png" alt=""><div><b>Try it on your phone</b><span>' + C.liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '') + '</span></div></div>' : '') +
+    '<p class="au-te-f">' + C.grounding + '</p>';
+  function ease(x){ return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+  function easeBack(x){ var c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); }
+  function capHTML(c){
+    c = c || {k: '', t: '', l: ''};
+    return '<div class="au-tk' + (c.n ? '' : ' au-ctx') + '"><i></i>' + (c.n ? 'Idea ' + c.n + ' of ' + IDEAS : (c.k || 'Context')) + '</div><h2 class="au-tt">' + c.t + '</h2><p class="au-tl">' + (c.l || '') + '</p>' +
+      (c.o ? '<div class="au-to"><small>Potential outcome · based on Adapty data</small><b><mark>' + c.o + '</mark></b><span>' + (c.ol || '') + '</span></div>' : '');
+  }
+  function place(id, tf, z){ scr[id].style.transform = tf; scr[id].style.zIndex = z; }
+  window.TOUR_MS = TOTAL;
+  window.tourAt = function(ms){
+    ms = Math.max(0, Math.min(TOTAL - 1, ms));
+    var i = 0; while (i < SEG.length - 1 && ms >= START[i + 1]) i++;
+    var s = SEG[i], local = ms - START[i], prev = i > 0 ? SEG[i - 1] : null;
+    Object.keys(STATE[i]).forEach(function(k){ S[k] = STATE[i][k]; }); sync();
+    var moving = prev && prev.id !== s.id && local < TR, p = moving ? ease(local / TR) : 1;
+    Object.keys(scr).forEach(function(k){ scr[k].classList.remove('is-active', 'is-past', 'under'); place(k, 'translateX(100%)', 0); });
+    var B = scr[s.id];
+    if (moving) {
+      if (B.classList.contains('sheet')) { place(prev.id, 'none', 1); B.style.transform = 'translateY(' + (1 - p) * 100 + '%)'; }
+      else {
+        var slide = 'translateX(' + (-28 * p) + '%)'; place(prev.id, slide, 1); B.style.transform = 'translateX(' + (1 - p) * 100 + '%)';
+        if (UNDER[i - 1]) place(UNDER[i - 1], slide, 0);
+      }
+    } else B.style.transform = 'none';
+    B.style.zIndex = 2;
+    if (UNDER[i] && !moving) place(UNDER[i], 'none', 1);
+    /* optional reveal: s.pop scales an element in, s.reveal fades one in a beat later */
+    popped.forEach(function(e){ e.style.transform = ''; e.style.opacity = ''; }); popped = [];
+    var q = Math.max(0, Math.min(1, (local - 250) / 550));
+    if (s.pop) { var pe = B.querySelector(s.pop); if (pe) { pe.style.transform = 'scale(' + (.55 + .45 * easeBack(q)) + ')'; pe.style.opacity = Math.min(1, q * 1.6); popped.push(pe); } }
+    if (s.reveal) { var re = B.querySelector(s.reveal); if (re) { re.style.opacity = Math.max(0, Math.min(1, (local - 520) / 300)); popped.push(re); } }
+    /* caption crossfades at screen changes; waits for the intro, gives way to the end card */
+    var key = s.id, op = 1;
+    if (moving) { if (p < .5) { key = prev.id; op = 1 - p * 2; } else op = p * 2 - 1; }
+    if (capEl.dataset.k !== key) { capEl.innerHTML = capHTML(T.captions[key]); capEl.dataset.k = key; }
+    var io = ms < 1100 ? 1 : Math.max(0, 1 - (ms - 1100) / 300), eo = s.end ? Math.min(1, local / 350) : 0;
+    capEl.style.opacity = op * Math.max(0, Math.min(1, (ms - 1400) / 300)) * (1 - eo);
+    /* the finger: fades in, taps, ripples out. Selectors are scoped to the screen */
+    tap.style.opacity = 0; if (pressed) { pressed.style.opacity = ''; pressed = null; }
+    if (s.tap) {
+      var el = B.querySelector(s.tap[0]), dt = local - s.tap[1];
+      if (el && dt > -260 && dt < 420) {
+        var r = el.getBoundingClientRect();
+        tap.style.left = (r.left + r.width / 2) + 'px'; tap.style.top = (r.top + r.height / 2) + 'px';
+        if (dt < 0) { tap.style.opacity = (dt + 260) / 260 * .9; tap.style.transform = 'scale(1)'; }
+        else { tap.style.opacity = .9 * (1 - dt / 420); tap.style.transform = 'scale(' + (1 + dt / 420 * .9) + ')'; }
+        if (dt >= 0 && dt < 160) { el.style.opacity = .72; pressed = el; }
+      }
+    }
+    $('tIntro').style.opacity = T.intro === false ? 0 : io;
+    $('tEnd').style.opacity = eo;
+    $('tProg').style.width = (ms / TOTAL * 100) + '%';
+    cur = s.id;
+    return i;
+  };
+  var tm = /[?&]t=(\d+)/.exec(Q); tourAt(tm ? +tm[1] : 0);
+}
+
+/* boot: #<screen-id> deep-links a screen (shoot.sh / hero-stills.sh use it); ?lang=xx picks the language */
+(function(){
+  var lm = /[?&]lang=(\w+)/.exec(Q); if (lm) setLang(lm[1]); else setLang(S.lang);
+  var h = location.hash.slice(1);
+  jump(scr[h] ? h : ORDER[0]);
+  if (scr[h] && !SHOT && !document.documentElement.classList.contains('appmode')) setTimeout(function(){ $('prototype').scrollIntoView(); }, 0);
+  if (/[?&]tour\b/.test(Q) && C.tour) tourInit();
+})();
+</script>
+</body>
+</html>
